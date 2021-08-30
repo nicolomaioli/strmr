@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Amplify, { Auth } from 'aws-amplify'
 import { AmplifySignOut, withAuthenticator } from '@aws-amplify/ui-react'
-import awsconfig from './aws-exports'
+import awsconfig from './awsconfig'
 
 Amplify.configure(awsconfig)
 
