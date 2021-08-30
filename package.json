@@ -20,10 +20,27 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
     "extends": [
+      "plugin:react/recommended",
+      "standard",
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "plugins": [
+      "react"
+    ],
+    "rules": {}
   },
   "browserslist": {
     "production": [
@@ -36,5 +53,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-react": "^7.25.1"
   }
 }
