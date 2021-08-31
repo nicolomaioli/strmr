@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Amplify, { Auth } from 'aws-amplify'
 import { AmplifySignOut, withAuthenticator } from '@aws-amplify/ui-react'
 import awsconfig from './awsconfig'
+import { Container, Typography } from '@material-ui/core'
 
 Amplify.configure(awsconfig)
 
@@ -24,10 +25,12 @@ function App () {
   }, [])
 
   return (
-    <div>
-      <h1>Hello World! { loggedIn ? user.getUsername() : ''}</h1>
+    <Container>
+      <Typography variant="h1">
+        Hello World! { loggedIn ? user.getUsername() : ''}
+      </Typography>
       <AmplifySignOut />
-    </div>
+    </Container>
   )
 }
 
