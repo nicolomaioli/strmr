@@ -13,7 +13,7 @@ import { useUser } from "../../contexts/UserCtx";
 import { signIn } from "../../lib/auth";
 
 export default function SignInForm() {
-  const [error, setError] = useState("");
+  const [hasError, setHasError] = useState(false);
   const [input, setInput] = useState({
     username: "",
     password: "",
@@ -42,7 +42,7 @@ export default function SignInForm() {
       redirect("/");
     } catch (err) {
       setUser(null);
-      setError(err.message);
+      setHasError(true);
     }
   };
 
@@ -61,13 +61,18 @@ export default function SignInForm() {
                 <Typography component="h1" variant="h5">
                   Sign In
                 </Typography>
-                {error ? error : ""}
+                {hasError && (
+                  <Typography color="error">
+                    Incorrect username or password.
+                  </Typography>
+                )}
                 <FormControl component="form" fullWidth>
                   <Box mt={3}>
                     <TextField
                       label="Username"
                       name="username"
                       placeholder="Enter username"
+                      error={hasError}
                       onChange={(e) => handleChange(e)}
                       fullWidth
                       required
@@ -79,6 +84,7 @@ export default function SignInForm() {
                       name="password"
                       placeholder="Enter password"
                       type="password"
+                      error={hasError}
                       onChange={(e) => handleChange(e)}
                       fullWidth
                       required
