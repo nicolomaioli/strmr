@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 
 import Button from "@material-ui/core/Button";
+import { NavLink } from "react-router-dom";
 
 import { useUser } from "../../contexts/UserCtx";
-import { signIn, getUser } from "../../lib/auth";
+import { getUser } from "../../lib/auth";
 
 export default function SignInButton() {
   const { setUser } = useUser();
@@ -17,18 +18,23 @@ export default function SignInButton() {
     handleUser();
   }, [setUser]);
 
-  const handleSignIn = async () => {
-    try {
-      const res = await signIn();
-      setUser(res);
-    } catch (err) {
-      console.error(err);
-      setUser(null);
-    }
-  };
+  // const handleSignIn = async () => {
+  //   try {
+  //     const res = await signIn();
+  //     setUser(res);
+  //   } catch (err) {
+  //     console.error(err);
+  //     setUser(null);
+  //   }
+  // };
 
   return (
-    <Button variant="contained" color="primary" onClick={handleSignIn}>
+    <Button
+      component={NavLink}
+      to="/signin"
+      variant="contained"
+      color="primary"
+    >
       Sign In
     </Button>
   );

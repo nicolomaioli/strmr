@@ -11,9 +11,9 @@ import { UserProvider } from "./contexts/UserCtx";
 function App() {
   return (
     <UserProvider>
-      <Nav />
-      <Container>
-        <Router>
+      <Router>
+        <Nav />
+        <Container>
           <Switch>
             <Route exact path="/">
               <Home />
@@ -22,8 +22,8 @@ function App() {
               <SignInForm />
             </Route>
           </Switch>
-        </Router>
-      </Container>
+        </Container>
+      </Router>
     </UserProvider>
   );
 }
