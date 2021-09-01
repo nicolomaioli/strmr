@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -10,9 +10,10 @@ import Typography from "@material-ui/core/Typography";
 import { useHistory } from "react-router-dom";
 
 import { useUser } from "../../contexts/UserCtx";
-import { signIn, getUser } from "../../lib/auth";
+import { signIn } from "../../lib/auth";
 
 export default function SignInForm() {
+  const [error, setError] = useState("");
   const [input, setInput] = useState({
     username: "",
     password: "",
@@ -26,33 +27,22 @@ export default function SignInForm() {
     history.push(path);
   };
 
-  useEffect(() => {
-    const handleUser = async () => {
-      try {
-        const user = await getUser();
-        setUser(user);
-      } catch (err) {
-        setUser(null);
-      }
-    };
-
-    handleUser();
-  }, [setUser]);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
   };
 
-  const handleSignIn = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
       const { username, password } = input;
       const res = await signIn(username, password);
       setUser(res);
       redirect("/");
     } catch (err) {
-      console.error(err);
       setUser(null);
+      setError(err.message);
     }
   };
 
@@ -71,7 +61,8 @@ export default function SignInForm() {
                 <Typography component="h1" variant="h5">
                   Sign In
                 </Typography>
-                <FormControl fullWidth>
+                {error ? error : ""}
+                <FormControl component="form" fullWidth>
                   <Box mt={3}>
                     <TextField
                       label="Username"
@@ -98,7 +89,7 @@ export default function SignInForm() {
                       type="submit"
                       color="primary"
                       variant="contained"
-                      onClick={handleSignIn}
+                      onClick={(e) => handleSubmit(e)}
                       fullWidth
                     >
                       Sign in
