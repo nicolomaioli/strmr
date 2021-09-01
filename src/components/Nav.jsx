@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react'
+
 import AppBar from '@material-ui/core/AppBar'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
+
 import { useUser } from '../contexts/UserCtx'
-import SignOutButton from './authentication/SignOutButton'
 import { signIn, getUser } from '../lib/auth'
+import SignOutButton from './authentication/SignOutButton'
 
 const useStyles = makeStyles(() => ({
   title: {
