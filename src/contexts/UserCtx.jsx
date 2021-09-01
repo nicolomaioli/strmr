@@ -16,7 +16,7 @@ function UserProvider({ children }) {
 }
 
 UserProvider.propTypes = {
-  children: PropTypes.oneOf([PropTypes.element, PropTypes.node]),
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.node]),
 };
 
 export { useUser, UserProvider };
