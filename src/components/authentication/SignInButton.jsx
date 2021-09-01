@@ -18,16 +18,6 @@ export default function SignInButton() {
     handleUser();
   }, [setUser]);
 
-  // const handleSignIn = async () => {
-  //   try {
-  //     const res = await signIn();
-  //     setUser(res);
-  //   } catch (err) {
-  //     console.error(err);
-  //     setUser(null);
-  //   }
-  // };
-
   return (
     <Button
       component={NavLink}

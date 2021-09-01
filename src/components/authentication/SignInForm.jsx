@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -7,8 +7,40 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import { useHistory } from "react-router-dom";
+
+import { useUser } from "../../contexts/UserCtx";
+import { signIn, getUser } from "../../lib/auth";
 
 export default function SignInForm() {
+  const { setUser } = useUser();
+
+  const history = useHistory();
+
+  const redirect = (path) => {
+    history.push(path);
+  };
+
+  useEffect(() => {
+    const handleUser = async () => {
+      const user = await getUser();
+      setUser(user);
+    };
+
+    handleUser();
+  }, [setUser]);
+
+  const handleSignIn = async () => {
+    try {
+      const res = await signIn();
+      setUser(res);
+      redirect("/");
+    } catch (err) {
+      console.error(err);
+      setUser(null);
+    }
+  };
+
   return (
     <Box mt={4}>
       <Grid
@@ -47,6 +79,7 @@ export default function SignInForm() {
                       type="submit"
                       color="primary"
                       variant="contained"
+                      onClick={handleSignIn}
                       fullWidth
                     >
                       Sign in
