@@ -12,10 +12,6 @@ export function getUser() {
   return Auth.currentAuthenticatedUser();
 }
 
-export function signIn() {
-  return Auth.signIn(
-    // nothing to see here, move along!
-    process.env.REACT_APP_TEST_USER_USERNAME,
-    process.env.REACT_APP_TEST_USER_PASSWORD
-  );
+export function signIn(username, password) {
+  return Auth.signIn(username, password);
 }

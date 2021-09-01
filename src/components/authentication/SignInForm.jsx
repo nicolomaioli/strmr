@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -13,6 +13,11 @@ import { useUser } from "../../contexts/UserCtx";
 import { signIn, getUser } from "../../lib/auth";
 
 export default function SignInForm() {
+  const [input, setInput] = useState({
+    username: "",
+    password: "",
+  });
+
   const { setUser } = useUser();
 
   const history = useHistory();
@@ -23,16 +28,26 @@ export default function SignInForm() {
 
   useEffect(() => {
     const handleUser = async () => {
-      const user = await getUser();
-      setUser(user);
+      try {
+        const user = await getUser();
+        setUser(user);
+      } catch (err) {
+        setUser(null);
+      }
     };
 
     handleUser();
   }, [setUser]);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInput({ ...input, [name]: value });
+  };
+
   const handleSignIn = async () => {
     try {
-      const res = await signIn();
+      const { username, password } = input;
+      const res = await signIn(username, password);
       setUser(res);
       redirect("/");
     } catch (err) {
@@ -61,6 +76,7 @@ export default function SignInForm() {
                     <TextField
                       label="Username"
                       placeholder="Enter username"
+                      onChange={(e) => handleChange(e)}
                       fullWidth
                       required
                     />
@@ -70,6 +86,7 @@ export default function SignInForm() {
                       label="Password"
                       placeholder="Enter password"
                       type="password"
+                      onChange={(e) => handleChange(e)}
                       fullWidth
                       required
                     />
