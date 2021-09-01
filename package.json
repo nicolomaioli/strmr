@@ -22,6 +22,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "prettier": {},
   "eslintConfig": {
     "env": {
       "browser": true,
@@ -29,7 +30,7 @@
     },
     "extends": [
       "plugin:react/recommended",
-      "standard",
+      "plugin:prettier/recommended",
       "react-app",
       "react-app/jest"
     ],
@@ -41,13 +42,19 @@
       "sourceType": "module"
     },
     "plugins": [
-      "react"
+      "react",
+      "prettier"
     ],
     "rules": {
+      "prettier/prettier": "error",
       "import/order": [
         "error",
         {
-          "groups": ["builtin", "external", "internal"],
+          "groups": [
+            "builtin",
+            "external",
+            "internal"
+          ],
           "pathGroups": [
             {
               "pattern": "react",
@@ -55,7 +62,9 @@
               "position": "before"
             }
           ],
-          "pathGroupsExcludedImportTypes": ["react"],
+          "pathGroupsExcludedImportTypes": [
+            "react"
+          ],
           "newlines-between": "always",
           "alphabetize": {
             "order": "asc",
@@ -79,10 +88,12 @@
   },
   "devDependencies": {
     "eslint": "^7.32.0",
-    "eslint-config-standard": "^16.0.3",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-react": "^7.25.1"
+    "eslint-plugin-react": "^7.25.1",
+    "prettier": "^2.3.2"
   }
 }

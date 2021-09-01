@@ -1,32 +1,22 @@
-import React, { useContext, useState, useMemo } from 'react'
+import React, { useContext, useState, useMemo } from "react";
 
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 
-const UserCxt = React.createContext()
+const UserCxt = React.createContext();
 
-function useUser () {
-  return useContext(UserCxt)
+function useUser() {
+  return useContext(UserCxt);
 }
 
-function UserProvider ({ children }) {
-  const [user, setUser] = useState(null)
-  const providerValue = useMemo(() => ({ user, setUser }), [user, setUser])
+function UserProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const providerValue = useMemo(() => ({ user, setUser }), [user, setUser]);
 
-  return (
-    <UserCxt.Provider value={providerValue}>
-      {children}
-    </UserCxt.Provider>
-  )
+  return <UserCxt.Provider value={providerValue}>{children}</UserCxt.Provider>;
 }
 
 UserProvider.propTypes = {
-  children: PropTypes.oneOf([
-    PropTypes.element,
-    PropTypes.node
-  ])
-}
+  children: PropTypes.oneOf([PropTypes.element, PropTypes.node]),
+};
 
-export {
-  useUser,
-  UserProvider
-}
+export { useUser, UserProvider };

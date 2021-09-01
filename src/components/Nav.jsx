@@ -1,34 +1,34 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from "react";
 
-import AppBar from '@material-ui/core/AppBar'
-import { makeStyles } from '@material-ui/core/styles'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
+import AppBar from "@material-ui/core/AppBar";
+import { makeStyles } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 
-import { useUser } from '../contexts/UserCtx'
-import { getUser } from '../lib/auth'
-import SignInButton from './authentication/SignInButton'
-import SignOutButton from './authentication/SignOutButton'
+import { useUser } from "../contexts/UserCtx";
+import { getUser } from "../lib/auth";
+import SignInButton from "./authentication/SignInButton";
+import SignOutButton from "./authentication/SignOutButton";
 
 const useStyles = makeStyles(() => ({
   title: {
-    flexGrow: 1
-  }
-}))
+    flexGrow: 1,
+  },
+}));
 
-export default function Nav () {
-  const { user, setUser } = useUser()
+export default function Nav() {
+  const { user, setUser } = useUser();
 
   useEffect(() => {
     const handleUser = async () => {
-      const user = await getUser()
-      setUser(user)
-    }
+      const user = await getUser();
+      setUser(user);
+    };
 
-    handleUser()
-  }, [setUser])
+    handleUser();
+  }, [setUser]);
 
-  const classes = useStyles()
+  const classes = useStyles();
 
   return (
     <React.Fragment>
@@ -37,11 +37,7 @@ export default function Nav () {
           <Typography variant="h6" className={classes.title}>
             Strmr
           </Typography>
-          {
-            user
-              ? <SignOutButton />
-              : <SignInButton />
-          }
+          {user ? <SignOutButton /> : <SignInButton />}
         </Toolbar>
       </AppBar>
       {/*
@@ -50,5 +46,5 @@ export default function Nav () {
       */}
       <Toolbar />
     </React.Fragment>
-  )
+  );
 }

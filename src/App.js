@@ -1,14 +1,14 @@
-import React from 'react'
+import React from "react";
 
-import Container from '@material-ui/core/Container'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import Container from "@material-ui/core/Container";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import SignInForm from './components/authentication/SignInForm'
-import Home from './components/Home'
-import Nav from './components/Nav'
-import { UserProvider } from './contexts/UserCtx'
+import SignInForm from "./components/authentication/SignInForm";
+import Home from "./components/Home";
+import Nav from "./components/Nav";
+import { UserProvider } from "./contexts/UserCtx";
 
-function App () {
+function App() {
   return (
     <UserProvider>
       <Nav />
@@ -25,7 +25,7 @@ function App () {
         </Router>
       </Container>
     </UserProvider>
-  )
+  );
 }
 
-export default App
+export default App;
