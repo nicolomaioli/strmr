@@ -4,8 +4,9 @@ import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import { signIn, signOut, getUser } from '../lib/auth'
 import { useUser } from '../contexts/UserCtx'
+import SignOutButton from './authentication/SignOutButton'
+import { signIn, getUser } from '../lib/auth'
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -35,16 +36,6 @@ export default function Nav () {
     }
   }
 
-  const handleSignOut = async () => {
-    try {
-      const res = await signOut()
-      setUser(res)
-    } catch (err) {
-      console.error(err)
-      setUser(null)
-    }
-  }
-
   const classes = useStyles()
 
   return (
@@ -56,9 +47,7 @@ export default function Nav () {
           </Typography>
           {
             user
-              ? <Button variant="contained" color="secondary" onClick={handleSignOut}>
-                  Sign out
-                </Button>
+              ? <SignOutButton />
               : <Button variant="contained" color="primary" onClick={handleSignIn}>
                   Sign In
                 </Button>
