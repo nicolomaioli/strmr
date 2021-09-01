@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import SignInForm from "./components/authentication/SignInForm";
 import Home from "./components/Home";
-import Nav from "./components/Nav";
+import Nav from "./components/navigation/Nav";
 import { UserProvider } from "./contexts/UserCtx";
 
 function App() {
