@@ -75,6 +75,7 @@ export default function SignInForm() {
                   <Box mt={3}>
                     <TextField
                       label="Username"
+                      name="username"
                       placeholder="Enter username"
                       onChange={(e) => handleChange(e)}
                       fullWidth
@@ -84,6 +85,7 @@ export default function SignInForm() {
                   <Box mt={3}>
                     <TextField
                       label="Password"
+                      name="password"
                       placeholder="Enter password"
                       type="password"
                       onChange={(e) => handleChange(e)}
