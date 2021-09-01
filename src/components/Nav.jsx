@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 
 import AppBar from "@material-ui/core/AppBar";
+import Avatar from "@material-ui/core/Avatar";
+import { deepOrange } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -9,12 +11,15 @@ import { NavLink } from "react-router-dom";
 import { useUser } from "../contexts/UserCtx";
 import { getUser } from "../lib/auth";
 import SignInButton from "./authentication/SignInButton";
-import SignOutButton from "./authentication/SignOutButton";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
     textDecoration: "none",
+  },
+  orange: {
+    color: theme.palette.getContrastText(deepOrange[500]),
+    backgroundColor: deepOrange[500],
   },
 }));
 
@@ -49,7 +54,13 @@ export default function Nav() {
           >
             Strmr
           </Typography>
-          {user ? <SignOutButton /> : <SignInButton />}
+          {user ? (
+            <Avatar className={classes.orange}>
+              {user.getUsername()[0].toUpperCase()}
+            </Avatar>
+          ) : (
+            <SignInButton />
+          )}
         </Toolbar>
       </AppBar>
       {/*
