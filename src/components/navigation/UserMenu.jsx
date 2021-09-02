@@ -28,8 +28,12 @@ export default function UserMenu() {
 
   useEffect(() => {
     const handleUser = async () => {
-      const user = await getUser();
-      setUser(user);
+      try {
+        const user = await getUser();
+        setUser(user);
+      } catch (err) {
+        setUser(null);
+      }
     };
 
     handleUser();
