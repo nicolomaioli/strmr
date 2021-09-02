@@ -8,7 +8,9 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { NavLink } from "react-router-dom";
 
 import { useUser } from "../../contexts/UserCtx";
 import { signOut, getUser } from "../../lib/auth";
@@ -79,6 +81,12 @@ export default function UserMenu() {
         open={Boolean(anchorEl)}
         onClose={closeMenu}
       >
+        <MenuItem component={NavLink} to="/upload" onClick={closeMenu}>
+          <ListItemIcon>
+            <CloudUploadIcon />
+          </ListItemIcon>
+          <Typography variant="inherit">Upload video</Typography>
+        </MenuItem>
         <MenuItem onClick={handleSignOut}>
           <ListItemIcon>
             <ExitToAppIcon />

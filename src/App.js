@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import SignInForm from "./components/authentication/SignInForm";
 import Home from "./components/Home";
 import Nav from "./components/navigation/Nav";
+import Upload from "./components/video/Upload";
 import { UserProvider } from "./contexts/UserCtx";
 
 function App() {
@@ -20,6 +21,9 @@ function App() {
             </Route>
             <Route exact path="/signin">
               <SignInForm />
+            </Route>
+            <Route exact path="/upload">
+              <Upload />
             </Route>
           </Switch>
         </Container>
