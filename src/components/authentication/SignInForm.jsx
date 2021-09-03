@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -13,19 +13,20 @@ import { useUser } from "../../contexts/UserCtx";
 import { signIn } from "../../lib/auth";
 
 export default function SignInForm() {
+  const { user, setUser } = useUser();
+  const history = useHistory();
   const [hasError, setHasError] = useState(false);
   const [input, setInput] = useState({
     username: "",
     password: "",
   });
 
-  const { setUser } = useUser();
-
-  const history = useHistory();
-
-  const redirect = (path) => {
-    history.push(path);
-  };
+  const redirect = useCallback(
+    (path) => {
+      history.push(path);
+    },
+    [history]
+  );
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,6 +46,10 @@ export default function SignInForm() {
       setHasError(true);
     }
   };
+
+  useEffect(() => {
+    if (user) redirect("/");
+  }, [user, redirect]);
 
   return (
     <Box mt={4}>
