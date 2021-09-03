@@ -6,6 +6,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Grid from "@material-ui/core/Grid";
 import Input from "@material-ui/core/Input";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -14,9 +15,10 @@ import { putObject } from "../../lib/storage";
 
 export default function Upload() {
   const [error, setError] = useState(null);
+  const [progress, setProgress] = useState(0);
 
   const progressCallback = (p) => {
-    console.log(`Uploaded: ${p.loaded}/${p.total}`);
+    setProgress(Math.trunc((p.loaded * 100) / p.total));
   };
 
   const handleChange = async (e) => {
@@ -88,6 +90,7 @@ export default function Upload() {
                 </FormControl>
               </Box>
             </Paper>
+            <LinearProgress variant="determinate" value={progress} />
           </Box>
         </Grid>
       </Grid>
