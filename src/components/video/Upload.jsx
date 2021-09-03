@@ -10,7 +10,19 @@ import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 
+import { putObject } from "../../lib/storage";
+
 export default function Upload() {
+  const handleChange = async (e) => {
+    try {
+      console.log(e.target.value);
+      const res = await putObject("uploads/video.mkv", e.target.value);
+      console.log("res", res);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <Box mt={4}>
       <Grid
@@ -32,8 +44,6 @@ export default function Upload() {
                       label="Tile"
                       name="title"
                       placeholder="Title"
-                      // error={hasError}
-                      // onChange={(e) => handleChange(e)}
                       required
                       fullWidth
                     />
@@ -43,7 +53,8 @@ export default function Upload() {
                       accept="image/*"
                       style={{ display: "none" }}
                       id="raised-button-file"
-                      multiple
+                      onChange={(e) => handleChange(e)}
+                      required
                       type="file"
                     />
                     <FormLabel htmlFor="raised-button-file">
