@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -13,13 +13,21 @@ import Typography from "@material-ui/core/Typography";
 import { putObject } from "../../lib/storage";
 
 export default function Upload() {
+  const [error, setError] = useState(null);
+
+  const progressCallback = (p) => {
+    console.log(`Uploaded: ${p.loaded}/${p.total}`);
+  };
+
   const handleChange = async (e) => {
     try {
-      console.log(e.target.value);
-      const res = await putObject("uploads/video.mkv", e.target.value);
+      console.log("path", e.target.value);
+      const res = await putObject("uploads/video.mkv", e.target.files[0], {
+        progressCallback,
+      });
       console.log("res", res);
     } catch (err) {
-      console.error(err);
+      setError(err);
     }
   };
 
@@ -38,6 +46,9 @@ export default function Upload() {
                 <Typography component="h1" variant="h5">
                   Upload a video
                 </Typography>
+                {error && (
+                  <Typography color="error">{error.message}</Typography>
+                )}
                 <FormControl component="form" fullWidth>
                   <Box mt={3}>
                     <TextField
