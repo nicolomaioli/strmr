@@ -12,7 +12,9 @@ import Snackbar from "@material-ui/core/Snackbar";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import MuiAlert from "@material-ui/lab/Alert";
+import { v4 as uuid } from "uuid";
 
+import { useUser } from "../../contexts/UserCtx";
 import { putObject } from "../../lib/storage";
 
 function Alert(props) {
@@ -20,9 +22,33 @@ function Alert(props) {
 }
 
 export default function Upload() {
+  const { user } = useUser();
+  const [title, setTitle] = useState("");
+  const [file, setFile] = useState(null);
+  const [data, setData] = useState(null);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
   const [progress, setProgress] = useState(0);
+
+  // Loads the file f into a throw-away HTML5 video element
+  // to extract mime type and duration.
+  // Throws an error if the file is not a video file.
+  const getVideoMetadata = async (f) =>
+    new Promise((resolve, reject) => {
+      const video = document.createElement("video");
+      video.preload = "metadata";
+
+      video.onloadeddata = () =>
+        resolve({
+          duration: video.duration.toString(),
+          width: video.videoWidth.toString(),
+          height: video.videoHeight.toString(),
+        });
+
+      video.onerror = () => reject(new Error("Invalid video file"));
+
+      video.src = window.URL.createObjectURL(f);
+    });
 
   const progressCallback = (p) => {
     const currentProgress = Math.trunc((p.loaded * 100) / p.total);
@@ -38,11 +64,37 @@ export default function Upload() {
     setSuccess(false);
   };
 
-  const handleChange = async (e) => {
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  };
+
+  const handleFileChange = async (e) => {
     try {
-      console.log("path", e.target.value);
-      const res = await putObject("uploads/video.mkv", e.target.files[0], {
+      const blob = e.target.files[0];
+      const data = await getVideoMetadata(blob);
+      setData(data);
+      setFile(blob);
+    } catch (err) {
+      setFile(null);
+      setError(err);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const username = user.getUsername();
+      const id = uuid();
+      const path = `uploads/${username}/${id}`;
+      const res = await putObject(path, file, {
         progressCallback,
+        metadata: {
+          title,
+          username,
+          id,
+          ...data,
+        },
       });
       console.log("res", res);
     } catch (err) {
@@ -75,16 +127,17 @@ export default function Upload() {
                         label="Tile"
                         name="title"
                         placeholder="Title"
+                        onChange={(e) => handleTitleChange(e)}
                         required
                         fullWidth
                       />
                     </Box>
                     <Box mt={3}>
                       <Input
-                        accept="image/*"
+                        accept="video/*"
                         style={{ display: "none" }}
                         id="raised-button-file"
-                        onChange={(e) => handleChange(e)}
+                        onChange={(e) => handleFileChange(e)}
                         required
                         type="file"
                       />
@@ -94,12 +147,17 @@ export default function Upload() {
                         </Button>
                       </FormLabel>
                     </Box>
+                    {file && (
+                      <Box mt={3}>
+                        <Typography>{file.name}</Typography>
+                      </Box>
+                    )}
                     <Box mt={3}>
                       <Button
                         type="submit"
                         color="primary"
                         variant="contained"
-                        // onClick={(e) => handleSubmit(e)}
+                        onClick={(e) => handleSubmit(e)}
                         fullWidth
                       >
                         Upload
