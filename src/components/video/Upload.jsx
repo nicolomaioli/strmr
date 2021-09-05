@@ -87,7 +87,7 @@ export default function Upload() {
       const username = user.getUsername();
       const id = uuid();
       const path = `uploads/${username}/${id}`;
-      const res = await putObject(path, file, {
+      await putObject(path, file, {
         progressCallback,
         metadata: {
           title,
@@ -96,7 +96,11 @@ export default function Upload() {
           ...data,
         },
       });
-      console.log("res", res);
+
+      setTitle("");
+      setData(null);
+      setFile(null);
+      setError(null);
     } catch (err) {
       setError(err);
     }
@@ -127,6 +131,7 @@ export default function Upload() {
                         label="Tile"
                         name="title"
                         placeholder="Title"
+                        value={title}
                         onChange={(e) => handleTitleChange(e)}
                         required
                         fullWidth
