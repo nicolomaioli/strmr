@@ -1,5 +1,7 @@
 service: strmr-video
 frameworkVersion: '2'
+configValidationMode: error
+useDotenv: true
 
 provider:
   name: aws
@@ -8,21 +10,28 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:stage, 'eu-west-1'}
 
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 's3:ListBucket'
+          Resource: ${env:VIDEOS_BUCKET_ARN}
+        - Effect: 'Allow'
+          Action:
+            - 's3:GetObject'
+          Resource: "${env:VIDEOS_BUCKET_ARN}/*"
+
 package:
   patterns:
     - '!./**'
     - ./bin/**
 
 functions:
-  hello:
-    handler: bin/hello
+  upload:
+    handler: bin/upload
     events:
-      - httpApi:
-          path: /hello
-          method: get
-  world:
-    handler: bin/world
-    events:
-      - httpApi:
-          path: /world
-          method: get
+      - s3:
+          bucket: "strmr-videos-${self:provider.stage}"
+          existing: true
+          event: s3:ObjectCreated:*
