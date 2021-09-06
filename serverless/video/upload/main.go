@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -13,22 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-)
-
-type VideoRecord struct {
-	Username  string `dynamodbav:"Username"`
-	VideoID   string `dynamodbav:"VideoID"`
-	CreatedAt string `dynamodbav:"CreatedAt"`
-	Duration  string `dynamodbav:"Duration,omitempty"`
-	Width     string `dynamodbav:"Width,omitempty"`
-	Height    string `dynamodbav:"Height,omitempty"`
-	Title     string `dynamodbav:"Title,omitempty"`
-	Key       string `dynamodbav:"Key"`
-	FileType  string `dynamodbav:"FileType"`
-}
-
-var (
-	VideoTableName = os.Getenv("VIDEOS_TABLE_NAME")
+	"github.com/nicolomaioli/strmr-infra/serverless/video/common"
 )
 
 func Handler(ctx context.Context, s3Event events.S3Event) {
@@ -51,7 +35,7 @@ func Handler(ctx context.Context, s3Event events.S3Event) {
 			log.Fatal(err)
 		}
 
-		r := &VideoRecord{
+		r := &common.VideoRecord{
 			Username: headObj.Metadata["username"],
 			VideoID:  headObj.Metadata["id"],
 			CreatedAt: fmt.Sprint(
@@ -71,7 +55,7 @@ func Handler(ctx context.Context, s3Event events.S3Event) {
 		}
 
 		output, err := dbClient.PutItem(ctx, &dynamodb.PutItemInput{
-			TableName: &VideoTableName,
+			TableName: &common.VideoTableName,
 			Item:      item,
 		})
 		if err != nil {
