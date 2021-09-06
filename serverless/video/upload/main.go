@@ -2,12 +2,33 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"os"
+	"time"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+)
+
+type VideoRecord struct {
+	Username  string `dynamodbav:"Username"`
+	VideoID   string `dynamodbav:"VideoID"`
+	CreatedAt string `dynamodbav:"CreatedAt"`
+	Duration  string `dynamodbav:"Duration,omitempty"`
+	Width     string `dynamodbav:"Width,omitempty"`
+	Height    string `dynamodbav:"Height,omitempty"`
+	Title     string `dynamodbav:"Title,omitempty"`
+	Key       string `dynamodbav:"Key"`
+	FileType  string `dynamodbav:"FileType"`
+}
+
+var (
+	VideoTableName = os.Getenv("VIDEOS_TABLE_NAME")
 )
 
 func Handler(ctx context.Context, s3Event events.S3Event) {
@@ -17,6 +38,7 @@ func Handler(ctx context.Context, s3Event events.S3Event) {
 	}
 
 	s3Client := s3.NewFromConfig(cfg)
+	dbClient := dynamodb.NewFromConfig(cfg)
 
 	for _, record := range s3Event.Records {
 		headObjIn := &s3.HeadObjectInput{
@@ -29,7 +51,34 @@ func Handler(ctx context.Context, s3Event events.S3Event) {
 			log.Fatal(err)
 		}
 
-		log.Println(headObj.Metadata)
+		r := &VideoRecord{
+			Username: headObj.Metadata["username"],
+			VideoID:  headObj.Metadata["id"],
+			CreatedAt: fmt.Sprint(
+				time.Now().UTC().Format("2006-01-02T15:04:05-0700"),
+			),
+			Duration: headObj.Metadata["duration"],
+			Width:    headObj.Metadata["width"],
+			Height:   headObj.Metadata["height"],
+			Title:    headObj.Metadata["title"],
+			Key:      record.S3.Object.Key,
+			FileType: "VIDEO",
+		}
+
+		item, err := attributevalue.MarshalMap(r)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		output, err := dbClient.PutItem(ctx, &dynamodb.PutItemInput{
+			TableName: &VideoTableName,
+			Item:      item,
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.Print(output.ResultMetadata)
 	}
 }
 

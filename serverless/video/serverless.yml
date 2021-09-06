@@ -10,6 +10,9 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:stage, 'eu-west-1'}
 
+  environment:
+    VIDEOS_TABLE_NAME: ${env:VIDEOS_TABLE_NAME}
+
   iam:
     role:
       statements:
@@ -20,7 +23,15 @@ provider:
         - Effect: 'Allow'
           Action:
             - 's3:GetObject'
-          Resource: "${env:VIDEOS_BUCKET_ARN}/*"
+          Resource: '${env:VIDEOS_BUCKET_ARN}/*'
+        - Effect: 'Allow'
+          Action:
+            - 'dynamodb:Query'
+            - 'dynamodb:Get*'
+            - 'dynamodb:Delete*'
+            - 'dynamodb:Update*'
+            - 'dynamodb:Put*'
+          Resource: ${env:VIDEOS_TABLE_ARN}
 
 package:
   patterns:
