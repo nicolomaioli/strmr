@@ -15,5 +15,10 @@ type VideoRecord struct {
 }
 
 var (
-	VideoTableName = os.Getenv("VIDEOS_TABLE_NAME")
+	Region               = os.Getenv("REGION")
+	Stage                = os.Getenv("STAGE")
+	VideoTableName       = os.Getenv("VIDEOS_TABLE_NAME")
+	MediaConvertURL      = os.Getenv("MEDIACONVERT_URL")
+	MediaConvertQueueArn = os.Getenv("MEDIACONVERT_QUEUE_ARN")
+	MediaConvertRoleArn  = os.Getenv("MEDIACONVERT_ROLE_ARN")
 )
