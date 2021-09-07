@@ -21,3 +21,11 @@ output "dynamodb_table_name" {
 output "dynamodb_table_arn" {
   value = aws_dynamodb_table.this.arn
 }
+
+output "mediaconvert_queue_arn" {
+  value = aws_media_convert_queue.this.arn
+}
+
+output "mediaconvert_queue_id" {
+  value = aws_media_convert_queue.this.id
+}
