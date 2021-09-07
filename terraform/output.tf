@@ -29,3 +29,11 @@ output "mediaconvert_queue_arn" {
 output "mediaconvert_queue_id" {
   value = aws_media_convert_queue.this.id
 }
+
+output "mediaconvert_role_arn" {
+  value = aws_iam_role.mediaconvert.arn
+}
+
+output "mediaconvert_role_name" {
+  value = aws_iam_role.mediaconvert.name
+}
