@@ -46,3 +46,5 @@ functions:
           bucket: "strmr-videos-${self:provider.stage}"
           existing: true
           event: s3:ObjectCreated:*
+          rules:
+            - prefix: public/uploads/
