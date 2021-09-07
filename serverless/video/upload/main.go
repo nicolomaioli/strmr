@@ -45,8 +45,7 @@ func Handler(ctx context.Context, s3Event events.S3Event) {
 			Width:    headObj.Metadata["width"],
 			Height:   headObj.Metadata["height"],
 			Title:    headObj.Metadata["title"],
-			Key:      record.S3.Object.Key,
-			FileType: "VIDEO",
+			Status:   "SUBMITTED",
 		}
 
 		item, err := attributevalue.MarshalMap(r)

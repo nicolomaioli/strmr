@@ -21,7 +21,7 @@ resource "aws_dynamodb_table" "this" {
   }
 
   attribute {
-    name = "FileType"
+    name = "Status"
     type = "S"
   }
 
@@ -33,7 +33,7 @@ resource "aws_dynamodb_table" "this" {
 
   global_secondary_index {
     name            = "TypeCreatedAtIndex"
-    hash_key        = "FileType"
+    hash_key        = "Status"
     range_key       = "CreatedAt"
     projection_type = "ALL"
   }

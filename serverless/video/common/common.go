@@ -11,7 +11,7 @@ type VideoRecord struct {
 	Height    string `dynamodbav:"Height,omitempty"`
 	Title     string `dynamodbav:"Title,omitempty"`
 	Key       string `dynamodbav:"Key"`
-	FileType  string `dynamodbav:"FileType"`
+	Status    string `dynamodbav:"Status"`
 }
 
 var (
