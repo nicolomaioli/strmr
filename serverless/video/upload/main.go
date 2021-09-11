@@ -81,8 +81,9 @@ func Handler(ctx context.Context, s3Event events.S3Event) {
 		)
 
 		outputS3URI := fmt.Sprintf(
-			"s3://%s/public/vod/%s",
+			"s3://%s/public/vod/%s/%s",
 			record.S3.Bucket.Name,
+			headObj.Metadata["username"],
 			headObj.Metadata["id"],
 		)
 
