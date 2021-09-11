@@ -27,9 +27,11 @@ func Handler(ctx context.Context, s3Event events.S3Event) {
 	dbClient := dynamodb.NewFromConfig(cfg)
 
 	mcClient := mediaconvert.New(mediaconvert.Options{
-		Region:           common.Region,
-		EndpointResolver: mediaconvert.EndpointResolverFromURL(common.MediaConvertURL),
-		Credentials:      cfg.Credentials,
+		Region:      common.Region,
+		Credentials: cfg.Credentials,
+		EndpointResolver: mediaconvert.EndpointResolverFromURL(
+			common.MediaConvertURL,
+		),
 	})
 
 	for _, record := range s3Event.Records {
@@ -86,8 +88,6 @@ func Handler(ctx context.Context, s3Event events.S3Event) {
 
 		// Values are pulled from the default values assigned when creating a
 		// Job in the MediaConvert Console
-		audioSourceName := "Audio Selector 1"
-
 		createJobInput := &mediaconvert.CreateJobInput{
 			Role:  &common.MediaConvertRoleArn,
 			Queue: &common.MediaConvertQueueArn,
@@ -95,6 +95,18 @@ func Handler(ctx context.Context, s3Event events.S3Event) {
 				Inputs: []mcTypes.Input{
 					{
 						FileInput: &inputS3URI,
+						VideoSelector: &mcTypes.VideoSelector{
+							ColorSpace: "FOLLOW",
+						},
+						AudioSelectors: map[string]mcTypes.AudioSelector{
+							"Audio Selector 1": {
+								Offset:           0,
+								DefaultSelection: "DEFAULT",
+								SelectorType:     "LANGUAGE_CODE",
+								ProgramSelection: 1,
+								LanguageCode:     "ENM",
+							},
+						},
 					},
 				},
 				OutputGroups: []mcTypes.OutputGroup{
@@ -112,11 +124,10 @@ func Handler(ctx context.Context, s3Event events.S3Event) {
 								},
 								AudioDescriptions: []mcTypes.AudioDescription{
 									{
-										AudioSourceName: &audioSourceName,
 										CodecSettings: &mcTypes.AudioCodecSettings{
 											Codec: mcTypes.AudioCodecAac,
 											AacSettings: &mcTypes.AacSettings{
-												CodingMode: mcTypes.AacCodingModeCodingMode20,
+												CodingMode: mcTypes.AacCodingModeCodingMode10,
 												SampleRate: 48000,
 												Bitrate:    96000,
 											},
