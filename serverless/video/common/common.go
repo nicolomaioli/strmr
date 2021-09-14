@@ -2,6 +2,24 @@ package common
 
 import "os"
 
+type JobStatus int
+
+const (
+	JOB_SUBMITTED JobStatus = iota
+	JOB_COMPLETED
+	JOB_ERROR
+)
+
+var JobStatusString = []string{
+	"SUBMITTED",
+	"COMPLETED",
+	"ERROR",
+}
+
+func (m JobStatus) String() string {
+	return JobStatusString[m]
+}
+
 type VideoRecord struct {
 	Username  string `dynamodbav:"Username"`
 	VideoID   string `dynamodbav:"VideoID"`
