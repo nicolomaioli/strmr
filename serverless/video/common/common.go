@@ -33,45 +33,24 @@ type VideoRecord struct {
 }
 
 type MediaConvertEventDetail struct {
-	Timestamp     int
-	AccountId     string
-	Queue         string
-	JobId         string
-	Status        string
-	ErrorCode     int
-	ErrorMessage  string
-	FramesDecoded int
-	JobProgress   struct {
-		PhaseProgress struct {
-			PROBING struct {
-				Status          string
-				PercentComplete int
-			}
-			TRANSCODING struct {
-				Status          string
-				PercentComplete int
-			}
-			UPLOADING struct {
-				Status          string
-				PercentComplete int
-			}
-		}
-		JobPercentComplete int
-		CurrentPhase       string
-		RetryCount         int
-	}
+	Timestamp          int               `json:"timestamp"`
+	AccountId          string            `json:"accountId"`
+	Queue              string            `json:"queue"`
+	JobId              string            `json:"jobId"`
+	Status             string            `json:"status"`
+	UserMetadata       map[string]string `json:"userMetadata"`
 	OutputGroupDetails []struct {
 		OutputDetails []struct {
-			OutputFilePaths []string
-			DurationInMs    int
+			OutputFilePaths []string `json:"outputFilePaths"`
+			DurationInMs    int      `json:"durationInMs"`
 			VideoDetails    struct {
-				WidthInPx  int
-				HeightInPx int
-			}
-		}
-		PlaylistFilePaths []string
-		Type              string
-	}
+				WidthInPx  int `json:"widthInPx"`
+				HeightInPx int `json:"heightInPx"`
+			} `json:"videoDetails"`
+		} `json:"outputDetails"`
+		PlaylistFilePaths []string `json:"playlistFilePaths"`
+		Type              string   `json:"type"`
+	} `json:"outputGroupDetails"`
 }
 
 var (

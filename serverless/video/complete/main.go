@@ -1,19 +1,23 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"log"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/nicolomaioli/strmr-infra/serverless/video/common"
 )
 
 func Handler(ctx context.Context, e events.CloudWatchEvent) {
-	var out bytes.Buffer
-	json.Indent(&out, e.Detail, "", "\t")
-	log.Print(out.String())
+	var d common.MediaConvertEventDetail
+	err := json.Unmarshal(e.Detail, &d)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("Completed video: %s", d.UserMetadata["id"])
 }
 
 func main() {
