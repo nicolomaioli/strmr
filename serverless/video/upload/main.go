@@ -154,11 +154,8 @@ func putRecord(ctx context.Context, cfg aws.Config, obj *s3.HeadObjectOutput, st
 		TableName: &common.VideoTableName,
 		Item:      item,
 	})
-	if err != nil {
-		return err
-	}
 
-	return nil
+	return err
 }
 
 func Handler(ctx context.Context, e events.S3Event) {
