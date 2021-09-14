@@ -64,3 +64,14 @@ functions:
           event: s3:ObjectCreated:*
           rules:
             - prefix: public/uploads/
+
+  complete:
+    handler: bin/complete
+    events:
+      - cloudwatchEvent:
+          event:
+            source:
+              - 'aws.mediaconvert'
+            detail:
+              status:
+                - 'COMPLETE'

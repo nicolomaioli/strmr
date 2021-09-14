@@ -158,13 +158,13 @@ func putRecord(ctx context.Context, cfg aws.Config, obj *s3.HeadObjectOutput, st
 	return nil
 }
 
-func Handler(ctx context.Context, s3Event events.S3Event) {
+func Handler(ctx context.Context, e events.S3Event) {
 	cfg, err := config.LoadDefaultConfig(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	for _, r := range s3Event.Records {
+	for _, r := range e.Records {
 		// Fetch video object
 		obj, err := getObject(ctx, cfg, &r)
 		if err != nil {

@@ -32,6 +32,48 @@ type VideoRecord struct {
 	Status    string `dynamodbav:"Status"`
 }
 
+type MediaConvertEventDetail struct {
+	Timestamp     int
+	AccountId     string
+	Queue         string
+	JobId         string
+	Status        string
+	ErrorCode     int
+	ErrorMessage  string
+	FramesDecoded int
+	JobProgress   struct {
+		PhaseProgress struct {
+			PROBING struct {
+				Status          string
+				PercentComplete int
+			}
+			TRANSCODING struct {
+				Status          string
+				PercentComplete int
+			}
+			UPLOADING struct {
+				Status          string
+				PercentComplete int
+			}
+		}
+		JobPercentComplete int
+		CurrentPhase       string
+		RetryCount         int
+	}
+	OutputGroupDetails []struct {
+		OutputDetails []struct {
+			OutputFilePaths []string
+			DurationInMs    int
+			VideoDetails    struct {
+				WidthInPx  int
+				HeightInPx int
+			}
+		}
+		PlaylistFilePaths []string
+		Type              string
+	}
+}
+
 var (
 	Region               = os.Getenv("REGION")
 	Stage                = os.Getenv("STAGE")
