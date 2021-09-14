@@ -24,10 +24,13 @@ func updateRecord(ctx context.Context, cfg aws.Config, d *common.MediaConvertEve
 				Value: d.UserMetadata["id"],
 			},
 		},
-		UpdateExpression: aws.String("set Status = :status"),
+		UpdateExpression: aws.String("SET Status = :status, Path = :path"),
 		ExpressionAttributeValues: map[string]types.AttributeValue{
 			":status": &types.AttributeValueMemberS{
 				Value: "COMPLETED",
+			},
+			":path": &types.AttributeValueMemberS{
+				Value: d.OutputGroupDetails[0].PlaylistFilePaths[0],
 			},
 		},
 	}
