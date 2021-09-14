@@ -57,6 +57,9 @@ func submitJob(ctx context.Context, cfg aws.Config, r *events.S3EventRecord, obj
 	createJobInput := &mediaconvert.CreateJobInput{
 		Role:  &common.MediaConvertRoleArn,
 		Queue: &common.MediaConvertQueueArn,
+		UserMetadata: map[string]string{
+			"id": obj.Metadata["id"],
+		},
 		Settings: &mcTypes.JobSettings{
 			Inputs: []mcTypes.Input{
 				{
