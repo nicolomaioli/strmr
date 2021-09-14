@@ -22,7 +22,7 @@ func (m JobStatus) String() string {
 
 type VideoRecord struct {
 	Username  string `dynamodbav:"Username"`
-	VideoID   string `dynamodbav:"VideoID"`
+	ID        string `dynamodbav:"ID"`
 	CreatedAt string `dynamodbav:"CreatedAt"`
 	Duration  string `dynamodbav:"Duration,omitempty"`
 	Width     string `dynamodbav:"Width,omitempty"`

@@ -134,7 +134,7 @@ func putRecord(ctx context.Context, cfg aws.Config, obj *s3.HeadObjectOutput, st
 
 	r := &common.VideoRecord{
 		Username: obj.Metadata["username"],
-		VideoID:  obj.Metadata["id"],
+		ID:       obj.Metadata["id"],
 		CreatedAt: fmt.Sprint(
 			time.Now().UTC().Format("2006-01-02T15:04:05-0700"),
 		),
