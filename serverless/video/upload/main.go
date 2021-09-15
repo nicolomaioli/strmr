@@ -187,8 +187,15 @@ func Handler(ctx context.Context, e events.S3Event) {
 			log.Fatal(err)
 		}
 
-		// Submit MediaConvert job
-		status := submitJob(ctx, cfg, &r, obj)
+		// Submit MediaConvert job, unless it's a test
+		var status common.JobStatus
+
+		if _, ok := obj.Metadata["test"]; ok {
+			log.Print("testing lambda, skipping conversion")
+			status = common.JOB_TEST
+		} else {
+			status = submitJob(ctx, cfg, &r, obj)
+		}
 
 		// Create a new DynamoDB record for the video
 		err = putRecord(ctx, cfg, obj, status)

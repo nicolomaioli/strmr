@@ -11,12 +11,14 @@ const (
 	JOB_SUBMITTED JobStatus = iota
 	JOB_COMPLETED
 	JOB_ERROR
+	JOB_TEST
 )
 
 var JobStatusString = []string{
 	"SUBMITTED",
 	"COMPLETED",
 	"ERROR",
+	"TEST",
 }
 
 func (m JobStatus) String() string {
