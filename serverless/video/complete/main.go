@@ -31,7 +31,7 @@ func updateRecord(ctx context.Context, cfg aws.Config, d *common.MediaConvertEve
 	upd := expression.
 		Set(expression.Name("JobStatus"), expression.Value("COMPLETED")).
 		Set(expression.Name("Path"), expression.Value(d.OutputGroupDetails[0].PlaylistFilePaths[0])).
-		Set(expression.Name("UpdatedAt"), expression.Value(time.Now()))
+		Set(expression.Name("UpdatedAt"), expression.Value(time.Now().Unix()))
 
 	expr, err := expression.NewBuilder().WithUpdate(upd).Build()
 	if err != nil {
