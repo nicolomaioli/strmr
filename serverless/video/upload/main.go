@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strconv"
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -133,14 +134,29 @@ func putRecord(ctx context.Context, cfg aws.Config, obj *s3.HeadObjectOutput, st
 	client := dynamodb.NewFromConfig(cfg)
 	timestamp := time.Now()
 
+	duration, err := strconv.ParseFloat(obj.Metadata["duration"], 64)
+	if err != nil {
+		return err
+	}
+
+	width, err := strconv.Atoi(obj.Metadata["width"])
+	if err != nil {
+		return err
+	}
+
+	height, err := strconv.Atoi(obj.Metadata["height"])
+	if err != nil {
+		return err
+	}
+
 	r := &common.VideoRecord{
 		Username:  obj.Metadata["username"],
 		ID:        obj.Metadata["id"],
 		CreatedAt: timestamp,
 		UpdatedAt: timestamp,
-		Duration:  obj.Metadata["duration"],
-		Width:     obj.Metadata["width"],
-		Height:    obj.Metadata["height"],
+		Duration:  duration,
+		Width:     width,
+		Height:    height,
 		Title:     obj.Metadata["title"],
 		JobStatus: status.String(),
 	}

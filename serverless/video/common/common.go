@@ -24,16 +24,16 @@ func (m JobStatus) String() string {
 }
 
 type VideoRecord struct {
-	Username  string    `dynamodbav:"Username"`
-	ID        string    `dynamodbav:"ID"`
-	CreatedAt time.Time `dynamodbav:"CreatedAt"`
-	UpdatedAt time.Time `dynamodbav:"CreatedAt"`
-	Duration  string    `dynamodbav:"Duration,omitempty"`
-	Width     string    `dynamodbav:"Width,omitempty"`
-	Height    string    `dynamodbav:"Height,omitempty"`
-	Title     string    `dynamodbav:"Title,omitempty"`
-	Key       string    `dynamodbav:"Key,omitempty"`
-	JobStatus string    `dynamodbav:"JobStatus"`
+	Username  string
+	ID        string
+	Duration  float64
+	Width     int
+	Height    int
+	Title     string
+	JobStatus string
+	CreatedAt time.Time `dynamodbav:",unixtime"`
+	UpdatedAt time.Time `dynamodbav:",unixtime"`
+	Path      string    `dynamodbav:",omitempty"`
 }
 
 type MediaConvertEventDetail struct {

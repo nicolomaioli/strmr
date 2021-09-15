@@ -16,7 +16,7 @@ resource "aws_dynamodb_table" "this" {
 
   attribute {
     name = "CreatedAt"
-    type = "S"
+    type = "N"
   }
 
   attribute {
