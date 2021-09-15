@@ -13,7 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/mediaconvert"
-	mcTypes "github.com/aws/aws-sdk-go-v2/service/mediaconvert/types"
+	"github.com/aws/aws-sdk-go-v2/service/mediaconvert/types"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/nicolomaioli/strmr-infra/serverless/video/common"
 )
@@ -60,14 +60,14 @@ func submitJob(ctx context.Context, cfg aws.Config, r *events.S3EventRecord, obj
 		UserMetadata: map[string]string{
 			"id": obj.Metadata["id"],
 		},
-		Settings: &mcTypes.JobSettings{
-			Inputs: []mcTypes.Input{
+		Settings: &types.JobSettings{
+			Inputs: []types.Input{
 				{
 					FileInput: &inputS3URI,
-					VideoSelector: &mcTypes.VideoSelector{
+					VideoSelector: &types.VideoSelector{
 						ColorSpace: "FOLLOW",
 					},
-					AudioSelectors: map[string]mcTypes.AudioSelector{
+					AudioSelectors: map[string]types.AudioSelector{
 						"Audio Selector 1": {
 							Offset:           0,
 							DefaultSelection: "DEFAULT",
@@ -78,39 +78,39 @@ func submitJob(ctx context.Context, cfg aws.Config, r *events.S3EventRecord, obj
 					},
 				},
 			},
-			OutputGroups: []mcTypes.OutputGroup{
+			OutputGroups: []types.OutputGroup{
 				{
-					Outputs: []mcTypes.Output{
+					Outputs: []types.Output{
 						{
-							VideoDescription: &mcTypes.VideoDescription{
-								CodecSettings: &mcTypes.VideoCodecSettings{
-									Codec: mcTypes.VideoCodecH264,
-									H264Settings: &mcTypes.H264Settings{
-										RateControlMode: mcTypes.H264RateControlModeQvbr,
+							VideoDescription: &types.VideoDescription{
+								CodecSettings: &types.VideoCodecSettings{
+									Codec: types.VideoCodecH264,
+									H264Settings: &types.H264Settings{
+										RateControlMode: types.H264RateControlModeQvbr,
 										MaxBitrate:      5000000,
 									},
 								},
 							},
-							AudioDescriptions: []mcTypes.AudioDescription{
+							AudioDescriptions: []types.AudioDescription{
 								{
-									CodecSettings: &mcTypes.AudioCodecSettings{
-										Codec: mcTypes.AudioCodecAac,
-										AacSettings: &mcTypes.AacSettings{
-											CodingMode: mcTypes.AacCodingModeCodingMode10,
+									CodecSettings: &types.AudioCodecSettings{
+										Codec: types.AudioCodecAac,
+										AacSettings: &types.AacSettings{
+											CodingMode: types.AacCodingModeCodingMode10,
 											SampleRate: 48000,
 											Bitrate:    96000,
 										},
 									},
 								},
 							},
-							ContainerSettings: &mcTypes.ContainerSettings{
-								Container: mcTypes.ContainerTypeMpd,
+							ContainerSettings: &types.ContainerSettings{
+								Container: types.ContainerTypeMpd,
 							},
 						},
 					},
-					OutputGroupSettings: &mcTypes.OutputGroupSettings{
+					OutputGroupSettings: &types.OutputGroupSettings{
 						Type: "DASH_ISO_GROUP_SETTINGS",
-						DashIsoGroupSettings: &mcTypes.DashIsoGroupSettings{
+						DashIsoGroupSettings: &types.DashIsoGroupSettings{
 							Destination:    &outputS3URI,
 							SegmentLength:  30,
 							FragmentLength: 2,
@@ -131,18 +131,18 @@ func submitJob(ctx context.Context, cfg aws.Config, r *events.S3EventRecord, obj
 
 func putRecord(ctx context.Context, cfg aws.Config, obj *s3.HeadObjectOutput, status common.JobStatus) error {
 	client := dynamodb.NewFromConfig(cfg)
+	timestamp := time.Now()
 
 	r := &common.VideoRecord{
-		Username: obj.Metadata["username"],
-		ID:       obj.Metadata["id"],
-		CreatedAt: fmt.Sprint(
-			time.Now().UTC().Format("2006-01-02T15:04:05-0700"),
-		),
-		Duration: obj.Metadata["duration"],
-		Width:    obj.Metadata["width"],
-		Height:   obj.Metadata["height"],
-		Title:    obj.Metadata["title"],
-		Status:   status.String(),
+		Username:  obj.Metadata["username"],
+		ID:        obj.Metadata["id"],
+		CreatedAt: timestamp,
+		UpdatedAt: timestamp,
+		Duration:  obj.Metadata["duration"],
+		Width:     obj.Metadata["width"],
+		Height:    obj.Metadata["height"],
+		Title:     obj.Metadata["title"],
+		JobStatus: status.String(),
 	}
 
 	item, err := attributevalue.MarshalMap(r)

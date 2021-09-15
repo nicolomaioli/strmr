@@ -1,6 +1,9 @@
 package common
 
-import "os"
+import (
+	"os"
+	"time"
+)
 
 type JobStatus int
 
@@ -21,15 +24,16 @@ func (m JobStatus) String() string {
 }
 
 type VideoRecord struct {
-	Username  string `dynamodbav:"Username"`
-	ID        string `dynamodbav:"ID"`
-	CreatedAt string `dynamodbav:"CreatedAt"`
-	Duration  string `dynamodbav:"Duration,omitempty"`
-	Width     string `dynamodbav:"Width,omitempty"`
-	Height    string `dynamodbav:"Height,omitempty"`
-	Title     string `dynamodbav:"Title,omitempty"`
-	Key       string `dynamodbav:"Key,omitempty"`
-	Status    string `dynamodbav:"Status"`
+	Username  string    `dynamodbav:"Username"`
+	ID        string    `dynamodbav:"ID"`
+	CreatedAt time.Time `dynamodbav:"CreatedAt"`
+	UpdatedAt time.Time `dynamodbav:"CreatedAt"`
+	Duration  string    `dynamodbav:"Duration,omitempty"`
+	Width     string    `dynamodbav:"Width,omitempty"`
+	Height    string    `dynamodbav:"Height,omitempty"`
+	Title     string    `dynamodbav:"Title,omitempty"`
+	Key       string    `dynamodbav:"Key,omitempty"`
+	JobStatus string    `dynamodbav:"JobStatus"`
 }
 
 type MediaConvertEventDetail struct {
