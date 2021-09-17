@@ -1,0 +1,77 @@
+service: strmr-video
+frameworkVersion: '2'
+configValidationMode: error
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: go1.x
+  lambdaHashingVersion: 20201221
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:stage, 'eu-west-1'}
+
+  environment:
+    REGION: ${self:provider.region}
+    STAGE: ${self:provider.stage}
+    VIDEOS_TABLE_NAME: ${env:VIDEOS_TABLE_NAME}
+    MEDIACONVERT_URL: ${env:MEDIACONVERT_URL}
+    MEDIACONVERT_QUEUE_ARN: ${env:MEDIACONVERT_QUEUE_ARN}
+    MEDIACONVERT_ROLE_ARN: ${env:MEDIACONVERT_ROLE_ARN}
+
+  iam:
+    role:
+      statements:
+        # S3
+        - Effect: 'Allow'
+          Action:
+            - 's3:ListBucket'
+          Resource: ${env:VIDEOS_BUCKET_ARN}
+        - Effect: 'Allow'
+          Action:
+            - 's3:GetObject'
+          Resource: '${env:VIDEOS_BUCKET_ARN}/*'
+        # DynamoDB
+        - Effect: 'Allow'
+          Action:
+            - 'dynamodb:Query'
+            - 'dynamodb:Get*'
+            - 'dynamodb:Delete*'
+            - 'dynamodb:Update*'
+            - 'dynamodb:Put*'
+          Resource: ${env:VIDEOS_TABLE_ARN}
+        # MediaConvert
+        - Effect: 'Allow'
+          Action:
+            - 'iam:PassRole'
+          Resource: '${env:MEDIACONVERT_ROLE_ARN}'
+        - Effect: 'Allow'
+          Action:
+            - 'mediaconvert:CreateJob'
+          Resource: '${env:MEDIACONVERT_QUEUE_ARN}'
+
+package:
+  patterns:
+    - '!./**'
+    - ./bin/**
+
+functions:
+  upload:
+    handler: bin/upload
+    events:
+      - s3:
+          bucket: "strmr-videos-${self:provider.stage}"
+          existing: true
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: public/uploads/
+
+  complete:
+    handler: bin/complete
+    events:
+      - cloudwatchEvent:
+          event:
+            source:
+              - 'aws.mediaconvert'
+            detail:
+              status:
+                - 'COMPLETE'
