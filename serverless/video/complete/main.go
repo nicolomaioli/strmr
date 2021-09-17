@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"time"
 
@@ -19,6 +20,13 @@ import (
 func updateRecord(ctx context.Context, cfg aws.Config, d *common.MediaConvertEventDetail) error {
 	client := dynamodb.NewFromConfig(cfg)
 
+	path := fmt.Sprintf(
+		"https://%s/public/vod/%s/%s.mpd",
+		common.ServeVideoURL,
+		d.UserMetadata["username"],
+		d.UserMetadata["id"],
+	)
+
 	key := map[string]string{
 		"ID": d.UserMetadata["id"],
 	}
@@ -30,7 +38,7 @@ func updateRecord(ctx context.Context, cfg aws.Config, d *common.MediaConvertEve
 
 	upd := expression.
 		Set(expression.Name("JobStatus"), expression.Value("COMPLETED")).
-		Set(expression.Name("Path"), expression.Value(d.OutputGroupDetails[0].PlaylistFilePaths[0])).
+		Set(expression.Name("Path"), expression.Value(path)).
 		Set(expression.Name("UpdatedAt"), expression.Value(time.Now().Unix()))
 
 	expr, err := expression.NewBuilder().WithUpdate(upd).Build()

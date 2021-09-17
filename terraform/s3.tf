@@ -23,3 +23,19 @@ resource "aws_s3_bucket" "videos" {
 
   tags = local.tags
 }
+
+resource "aws_s3_bucket" "vod" {
+  bucket = "${var.application}-vod-${terraform.workspace}"
+  acl    = "private"
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_origins = ["*"]
+    max_age_seconds = 3000
+    allowed_methods = [
+      "GET",
+    ]
+  }
+
+  tags = local.tags
+}

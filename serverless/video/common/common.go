@@ -62,8 +62,10 @@ type MediaConvertEventDetail struct {
 var (
 	Region               = os.Getenv("REGION")
 	Stage                = os.Getenv("STAGE")
+	OutputBucketName     = os.Getenv("OUTPUT_BUCKET_NAME")
 	VideoTableName       = os.Getenv("VIDEOS_TABLE_NAME")
 	MediaConvertURL      = os.Getenv("MEDIACONVERT_URL")
 	MediaConvertQueueArn = os.Getenv("MEDIACONVERT_QUEUE_ARN")
 	MediaConvertRoleArn  = os.Getenv("MEDIACONVERT_ROLE_ARN")
+	ServeVideoURL        = os.Getenv("SERVE_VIDEO_URL")
 )

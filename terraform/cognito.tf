@@ -46,58 +46,57 @@ resource "aws_cognito_identity_pool" "this" {
   tags = local.tags
 }
 
-resource "aws_iam_role" "authenticated" {
-  name = "${var.application}-authenticated-${terraform.workspace}"
+data "aws_iam_policy_document" "cognito_authenticated_role" {
+  statement {
+    actions = [
+      "sts:AssumeRoleWithWebIdentity"
+    ]
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "cognito-identity.amazonaws.com"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringEquals": {
-          "cognito-identity.amazonaws.com:aud": "${aws_cognito_identity_pool.this.id}"
-        },
-        "ForAnyValue:StringLike": {
-          "cognito-identity.amazonaws.com:amr": "authenticated"
-        }
-      }
+    principals {
+      type        = "Federated"
+      identifiers = ["cognito-identity.amazonaws.com"]
     }
-  ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "cognito-identity.amazonaws.com:aud"
+      values   = [aws_cognito_identity_pool.this.id]
+    }
+
+    condition {
+      test     = "ForAnyValue:StringLike"
+      variable = "cognito-identity.amazonaws.com:amr"
+      values   = ["authenticated"]
+    }
+  }
 }
-EOF
+
+resource "aws_iam_role" "authenticated" {
+  name               = "${var.application}-authenticated-${terraform.workspace}"
+  assume_role_policy = data.aws_iam_policy_document.cognito_authenticated_role.json
+}
+
+data "aws_iam_policy_document" "cognito_authenticated_role_policy" {
+  statement {
+    actions = [
+      "s3:DeleteObject",
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:PutObject",
+      "s3:PutObjectAcl",
+    ]
+
+    resources = [
+      "${aws_s3_bucket.videos.arn}",
+      "${aws_s3_bucket.videos.arn}/*",
+    ]
+  }
 }
 
 resource "aws_iam_role_policy" "authenticated" {
-  name = "${var.application}-authenticated-${terraform.workspace}"
-  role = aws_iam_role.authenticated.id
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:DeleteObject",
-        "s3:GetObject",
-        "s3:ListBucket",
-        "s3:PutObject",
-        "s3:PutObjectAcl"
-      ],
-      "Resource": [
-        "${aws_s3_bucket.videos.arn}",
-        "${aws_s3_bucket.videos.arn}/*"
-      ]
-    }
-  ]
-}
-EOF
+  name   = "${var.application}-authenticated-${terraform.workspace}"
+  role   = aws_iam_role.authenticated.id
+  policy = data.aws_iam_policy_document.cognito_authenticated_role_policy.json
 }
 
 resource "aws_cognito_identity_pool_roles_attachment" "this" {

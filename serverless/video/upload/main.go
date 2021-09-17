@@ -49,7 +49,7 @@ func submitJob(ctx context.Context, cfg aws.Config, r *events.S3EventRecord, obj
 
 	outputS3URI := fmt.Sprintf(
 		"s3://%s/public/vod/%s/%s",
-		r.S3.Bucket.Name,
+		common.OutputBucketName,
 		obj.Metadata["username"],
 		obj.Metadata["id"],
 	)
@@ -59,7 +59,8 @@ func submitJob(ctx context.Context, cfg aws.Config, r *events.S3EventRecord, obj
 		Role:  &common.MediaConvertRoleArn,
 		Queue: &common.MediaConvertQueueArn,
 		UserMetadata: map[string]string{
-			"id": obj.Metadata["id"],
+			"id":       obj.Metadata["id"],
+			"username": obj.Metadata["username"],
 		},
 		Settings: &types.JobSettings{
 			Inputs: []types.Input{

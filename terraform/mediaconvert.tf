@@ -7,45 +7,49 @@ resource "aws_media_convert_queue" "this" {
   tags = local.tags
 }
 
-resource "aws_iam_role" "mediaconvert" {
-  name = "${var.application}-mediaconvert-${terraform.workspace}"
+data "aws_iam_policy_document" "mediaconvert_role_policy" {
+  statement {
+    actions = [
+      "s3:Get*",
+      "s3:List*",
+    ]
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "mediaconvert.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
+    resources = [
+      "${aws_s3_bucket.videos.arn}/*",
+    ]
+  }
+
+  statement {
+    actions = [
+      "s3:Get*",
+      "s3:List*",
+      "s3:Put*",
+    ]
+
+    resources = [
+      "${aws_s3_bucket.vod.arn}/*",
+    ]
+  }
 }
 
 resource "aws_iam_role_policy" "mediaconvert" {
-  name = "${var.application}-mediaconvert-${terraform.workspace}"
-  role = aws_iam_role.mediaconvert.id
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:Get*",
-        "s3:List*",
-        "s3:Put*"
-      ],
-      "Resource": [
-        "${aws_s3_bucket.videos.arn}/*"
-      ]
-    }
-  ]
+  name   = "${var.application}-mediaconvert-${terraform.workspace}"
+  role   = aws_iam_role.mediaconvert.id
+  policy = data.aws_iam_policy_document.mediaconvert_role_policy.json
 }
-EOF
+
+data "aws_iam_policy_document" "mediaconvert_role" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["mediaconvert.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "mediaconvert" {
+  name               = "${var.application}-mediaconvert-${terraform.workspace}"
+  assume_role_policy = data.aws_iam_policy_document.mediaconvert_role.json
 }
