@@ -38,9 +38,5 @@ resource "aws_dynamodb_table" "this" {
     projection_type = "ALL"
   }
 
-  tags = {
-    Application = var.application
-    Environment = terraform.workspace
-    Terraform   = true
-  }
+  tags = local.tags
 }

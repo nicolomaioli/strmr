@@ -4,11 +4,7 @@ resource "aws_media_convert_queue" "this" {
   pricing_plan = "ON_DEMAND"
   status       = "ACTIVE"
 
-  tags = {
-    Application = var.application
-    Environment = terraform.workspace
-    Terraform   = true
-  }
+  tags = local.tags
 }
 
 resource "aws_iam_role" "mediaconvert" {

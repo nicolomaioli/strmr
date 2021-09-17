@@ -21,9 +21,5 @@ resource "aws_s3_bucket" "videos" {
     ]
   }
 
-  tags = {
-    Application = var.application
-    Environment = terraform.workspace
-    Terraform   = true
-  }
+  tags = local.tags
 }

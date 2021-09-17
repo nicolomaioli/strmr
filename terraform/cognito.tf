@@ -7,11 +7,7 @@ resource "aws_cognito_user_pool" "this" {
     allow_admin_create_user_only = true
   }
 
-  tags = {
-    Application = var.application
-    Environment = terraform.workspace
-    Terraform   = true
-  }
+  tags = local.tags
 }
 
 resource "aws_cognito_user_group" "basic" {
@@ -47,11 +43,7 @@ resource "aws_cognito_identity_pool" "this" {
     server_side_token_check = false
   }
 
-  tags = {
-    Application = var.application
-    Environment = terraform.workspace
-    Terraform   = true
-  }
+  tags = local.tags
 }
 
 resource "aws_iam_role" "authenticated" {
