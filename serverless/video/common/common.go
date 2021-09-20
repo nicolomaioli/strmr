@@ -1,8 +1,28 @@
 package common
 
 import (
+	"encoding/json"
+	"errors"
+	"log"
 	"os"
 	"time"
+
+	"github.com/aws/aws-lambda-go/events"
+)
+
+var (
+	Region               = os.Getenv("REGION")
+	Stage                = os.Getenv("STAGE")
+	OutputBucketName     = os.Getenv("OUTPUT_BUCKET_NAME")
+	VideoTableName       = os.Getenv("VIDEOS_TABLE_NAME")
+	MediaConvertURL      = os.Getenv("MEDIACONVERT_URL")
+	MediaConvertQueueArn = os.Getenv("MEDIACONVERT_QUEUE_ARN")
+	MediaConvertRoleArn  = os.Getenv("MEDIACONVERT_ROLE_ARN")
+	ServeVideoURL        = os.Getenv("SERVE_VIDEO_URL")
+
+	LambdaHTTPHeaders = map[string]string{
+		"Content-Type": "application/json",
+	}
 )
 
 type JobStatus int
@@ -23,6 +43,10 @@ var JobStatusString = []string{
 
 func (m JobStatus) String() string {
 	return JobStatusString[m]
+}
+
+type LambdaHTTPErrorBody struct {
+	Message string `json:"message"`
 }
 
 type VideoRecord struct {
@@ -59,13 +83,23 @@ type MediaConvertEventDetail struct {
 	} `json:"outputGroupDetails"`
 }
 
-var (
-	Region               = os.Getenv("REGION")
-	Stage                = os.Getenv("STAGE")
-	OutputBucketName     = os.Getenv("OUTPUT_BUCKET_NAME")
-	VideoTableName       = os.Getenv("VIDEOS_TABLE_NAME")
-	MediaConvertURL      = os.Getenv("MEDIACONVERT_URL")
-	MediaConvertQueueArn = os.Getenv("MEDIACONVERT_QUEUE_ARN")
-	MediaConvertRoleArn  = os.Getenv("MEDIACONVERT_ROLE_ARN")
-	ServeVideoURL        = os.Getenv("SERVE_VIDEO_URL")
-)
+func HandleLambdaHTTPError(err error, status int) *events.APIGatewayV2HTTPResponse {
+	log.Print(err)
+
+	if status > 499 {
+		// Don't expose the error message
+		err = errors.New("Internal Server Error")
+	}
+
+	e := LambdaHTTPErrorBody{
+		Message: err.Error(),
+	}
+
+	b, _ := json.Marshal(e)
+
+	return &events.APIGatewayV2HTTPResponse{
+		Headers:    LambdaHTTPHeaders,
+		Body:       string(b),
+		StatusCode: status,
+	}
+}

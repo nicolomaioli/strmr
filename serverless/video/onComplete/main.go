@@ -14,7 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/nicolomaioli/strmr-infra/serverless/video/common"
+	"github.com/nicolomaioli/strmr/serverless/video/common"
 )
 
 func updateRecord(ctx context.Context, cfg aws.Config, d *common.MediaConvertEventDetail) error {

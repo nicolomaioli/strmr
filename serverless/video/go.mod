@@ -1,4 +1,4 @@
-module github.com/nicolomaioli/strmr-infra/serverless/video
+module github.com/nicolomaioli/strmr/serverless/video
 
 go 1.17
 

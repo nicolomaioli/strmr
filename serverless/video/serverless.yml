@@ -10,6 +10,9 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:stage, 'eu-west-1'}
 
+  httpApi:
+    id: ${env:HTTP_API_ID}
+
   environment:
     REGION: ${self:provider.region}
     STAGE: ${self:provider.stage}
@@ -57,8 +60,8 @@ package:
     - ./bin/**
 
 functions:
-  upload:
-    handler: bin/upload
+  onUpload:
+    handler: bin/onUpload
     events:
       - s3:
           bucket: "strmr-videos-${self:provider.stage}"
@@ -67,8 +70,8 @@ functions:
           rules:
             - prefix: public/uploads/
 
-  complete:
-    handler: bin/complete
+  onComplete:
+    handler: bin/onComplete
     events:
       - cloudwatchEvent:
           event:
@@ -77,3 +80,8 @@ functions:
             detail:
               status:
                 - 'COMPLETE'
+
+  getByID:
+    handler: bin/getByID
+    events:
+      - httpApi: 'GET /video/{id}'

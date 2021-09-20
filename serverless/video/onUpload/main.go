@@ -16,7 +16,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/mediaconvert"
 	"github.com/aws/aws-sdk-go-v2/service/mediaconvert/types"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/nicolomaioli/strmr-infra/serverless/video/common"
+	"github.com/nicolomaioli/strmr/serverless/video/common"
 )
 
 func getObject(ctx context.Context, cfg aws.Config, r *events.S3EventRecord) (*s3.HeadObjectOutput, error) {
