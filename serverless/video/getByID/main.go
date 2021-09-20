@@ -68,33 +68,33 @@ func getByID(ctx context.Context, cfg aws.Config, id string) (*common.VideoRecor
 func Handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
 	cfg, err := config.LoadDefaultConfig(ctx)
 	if err != nil {
-		e := common.HandleLambdaHTTPError(err, 500)
+		e := common.HandleLambdaHTTPError(ctx, err, 500)
 		return *e, nil
 	}
 
 	if val, ok := req.PathParameters["id"]; ok {
 		if val == "" {
 			err := errors.New("missing require path parameter \"id\"")
-			e := common.HandleLambdaHTTPError(err, 400)
+			e := common.HandleLambdaHTTPError(ctx, err, 400)
 			return *e, nil
 		}
 	}
 
 	r, err := getByID(ctx, cfg, req.PathParameters["id"])
 	if err != nil {
-		e := common.HandleLambdaHTTPError(err, 500)
+		e := common.HandleLambdaHTTPError(ctx, err, 500)
 		return *e, nil
 	}
 
 	if r.ID == "" {
 		err := errors.New("video not found")
-		e := common.HandleLambdaHTTPError(err, 404)
+		e := common.HandleLambdaHTTPError(ctx, err, 404)
 		return *e, nil
 	}
 
 	b, err := json.Marshal(r)
 	if err != nil {
-		e := common.HandleLambdaHTTPError(err, 500)
+		e := common.HandleLambdaHTTPError(ctx, err, 500)
 		return *e, nil
 	}
 

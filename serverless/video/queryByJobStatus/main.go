@@ -53,20 +53,20 @@ func queryByJobStatus(ctx context.Context, cfg aws.Config, jobStatus common.JobS
 func Handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
 	cfg, err := config.LoadDefaultConfig(ctx)
 	if err != nil {
-		e := common.HandleLambdaHTTPError(err, 500)
+		e := common.HandleLambdaHTTPError(ctx, err, 500)
 		return *e, nil
 	}
 
 	r, err := queryByJobStatus(ctx, cfg, common.JOB_COMPLETED)
 	if err != nil {
-		e := common.HandleLambdaHTTPError(err, 500)
+		e := common.HandleLambdaHTTPError(ctx, err, 500)
 		return *e, nil
 	}
 
 	// I'm happy for the client to deal with an empty array
 	b, err := json.Marshal(r)
 	if err != nil {
-		e := common.HandleLambdaHTTPError(err, 500)
+		e := common.HandleLambdaHTTPError(ctx, err, 500)
 		return *e, nil
 	}
 
