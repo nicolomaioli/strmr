@@ -17,11 +17,11 @@ import { v4 as uuid } from "uuid";
 import { useUser } from "../../contexts/UserCtx";
 import { putObject } from "../../lib/storage";
 
-function Alert(props) {
+const Alert = (props) => {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+};
 
-export default function Upload() {
+const Upload = () => {
   const { user } = useUser();
   const [title, setTitle] = useState("");
   const [file, setFile] = useState(null);
@@ -183,4 +183,6 @@ export default function Upload() {
       </Snackbar>
     </React.Fragment>
   );
-}
+};
+
+export default Upload;

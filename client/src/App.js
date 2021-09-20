@@ -10,7 +10,7 @@ import Play from "./components/video/Play";
 import Upload from "./components/video/Upload";
 import { UserProvider } from "./contexts/UserCtx";
 
-function App() {
+const App = () => {
   return (
     <UserProvider>
       <Router>
@@ -34,6 +34,6 @@ function App() {
       </Router>
     </UserProvider>
   );
-}
+};
 
 export default App;

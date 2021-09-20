@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function Nav() {
+const Nav = () => {
   const { user, setUser } = useUser();
 
   useEffect(() => {
@@ -59,4 +59,6 @@ export default function Nav() {
       <Toolbar />
     </React.Fragment>
   );
-}
+};
+
+export default Nav;

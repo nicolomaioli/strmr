@@ -7,7 +7,7 @@ import "shaka-player/dist/controls.css";
 
 const { REACT_APP_STRMR_API_URL } = process.env;
 
-export default function Play() {
+const Play = () => {
   const [videoSrc, setVideoSrc] = useState("");
   const [error, setError] = useState(null);
   const { id } = useParams();
@@ -37,4 +37,6 @@ export default function Play() {
       )}
     </React.Fragment>
   );
-}
+};
+
+export default Play;

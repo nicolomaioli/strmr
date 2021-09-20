@@ -4,6 +4,8 @@ import awsconfig from "./awsconfig";
 
 Amplify.configure(awsconfig);
 
-export async function putObject(key, object, options) {
+const putObject = async (key, object, options) => {
   return Storage.put(key, object, options);
-}
+};
+
+export { putObject };

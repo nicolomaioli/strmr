@@ -4,18 +4,20 @@ import awsconfig from "./awsconfig";
 
 Amplify.configure(awsconfig);
 
-export async function signOut() {
+const signOut = async () => {
   return Auth.signOut();
-}
+};
 
-export async function signIn(username, password) {
+const signIn = async (username, password) => {
   return Auth.signIn(username, password);
-}
+};
 
-export async function getUser() {
+const getUser = async () => {
   return Auth.currentAuthenticatedUser();
-}
+};
 
-export async function getCurrentSession() {
+const getCurrentSession = async () => {
   return Auth.currentSession();
-}
+};
+
+export { signOut, signIn, getUser, getCurrentSession };

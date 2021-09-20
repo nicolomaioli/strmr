@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UserMenu() {
+const UserMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const { user, setUser } = useUser();
 
@@ -96,4 +96,6 @@ export default function UserMenu() {
       </Menu>
     </React.Fragment>
   );
-}
+};
+
+export default UserMenu;

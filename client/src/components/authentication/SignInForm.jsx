@@ -12,7 +12,7 @@ import { useHistory } from "react-router-dom";
 import { useUser } from "../../contexts/UserCtx";
 import { signIn } from "../../lib/auth";
 
-export default function SignInForm() {
+const SignInForm = () => {
   const { user, setUser } = useUser();
   const history = useHistory();
   const [hasError, setHasError] = useState(false);
@@ -119,4 +119,6 @@ export default function SignInForm() {
       </Grid>
     </Box>
   );
-}
+};
+
+export default SignInForm;
