@@ -2,8 +2,6 @@ package common
 
 import (
 	"encoding/json"
-	"errors"
-	"log"
 	"os"
 	"time"
 
@@ -84,12 +82,8 @@ type MediaConvertEventDetail struct {
 }
 
 func HandleLambdaHTTPError(err error, status int) *events.APIGatewayV2HTTPResponse {
-	log.Print(err)
-
-	if status > 499 {
-		// Don't expose the error message
-		err = errors.New("Internal Server Error")
-	}
+	// TODO: improve error handling by hiding implementation errors
+	// This being a POC I'm not worried about exposing implementation errors
 
 	e := LambdaHTTPErrorBody{
 		Message: err.Error(),

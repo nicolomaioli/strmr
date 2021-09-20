@@ -72,10 +72,12 @@ func Handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.AP
 		return *e, nil
 	}
 
-	if _, ok := req.PathParameters["id"]; !ok {
-		err := errors.New("request: missing require path parameter \"id\"")
-		e := common.HandleLambdaHTTPError(err, 400)
-		return *e, nil
+	if val, ok := req.PathParameters["id"]; ok {
+		if val == "" {
+			err := errors.New("missing require path parameter \"id\"")
+			e := common.HandleLambdaHTTPError(err, 400)
+			return *e, nil
+		}
 	}
 
 	r, err := getByID(ctx, cfg, req.PathParameters["id"])
@@ -85,7 +87,7 @@ func Handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.AP
 	}
 
 	if r.ID == "" {
-		err := errors.New("request: video not found")
+		err := errors.New("video not found")
 		e := common.HandleLambdaHTTPError(err, 404)
 		return *e, nil
 	}

@@ -38,12 +38,14 @@ provider:
         # DynamoDB
         - Effect: 'Allow'
           Action:
-            - 'dynamodb:Query'
             - 'dynamodb:Get*'
-            - 'dynamodb:Delete*'
             - 'dynamodb:Update*'
             - 'dynamodb:Put*'
           Resource: ${env:VIDEOS_TABLE_ARN}
+        - Effect: 'Allow'
+          Action:
+            - 'dynamodb:Query'
+          Resource: '${env:VIDEOS_TABLE_ARN}/index/*'
         # MediaConvert
         - Effect: 'Allow'
           Action:
@@ -85,3 +87,8 @@ functions:
     handler: bin/getByID
     events:
       - httpApi: 'GET /video/{id}'
+
+  queryByJobStatus:
+    handler: bin/queryByJobStatus
+    events:
+      - httpApi: 'GET /video'

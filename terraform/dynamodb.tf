@@ -15,26 +15,19 @@ resource "aws_dynamodb_table" "this" {
   }
 
   attribute {
-    name = "CreatedAt"
-    type = "N"
-  }
-
-  attribute {
     name = "JobStatus"
     type = "S"
   }
 
   global_secondary_index {
-    name            = "UsernameCreatedAtIndex"
+    name            = "UsernameIndex"
     hash_key        = "Username"
-    range_key       = "CreatedAt"
     projection_type = "ALL"
   }
 
   global_secondary_index {
-    name            = "JobStatusCreatedAtIndex"
+    name            = "JobStatusIndex"
     hash_key        = "JobStatus"
-    range_key       = "CreatedAt"
     projection_type = "ALL"
   }
 

@@ -5,6 +5,7 @@ build:
 	env GOARCH=amd64 GOOS=linux go build -ldflags="-s -w" -o bin/onUpload onUpload/main.go
 	env GOARCH=amd64 GOOS=linux go build -ldflags="-s -w" -o bin/onComplete onComplete/main.go
 	env GOARCH=amd64 GOOS=linux go build -ldflags="-s -w" -o bin/getByID getByID/main.go
+	env GOARCH=amd64 GOOS=linux go build -ldflags="-s -w" -o bin/queryByJobStatus queryByJobStatus/main.go
 
 clean:
 	rm -rf ./bin
