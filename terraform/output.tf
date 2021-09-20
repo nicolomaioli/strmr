@@ -10,6 +10,14 @@ output "identity_pool_id" {
   value = aws_cognito_identity_pool.this.id
 }
 
+output "api_gateway_id" {
+  value = aws_apigatewayv2_api.this.id
+}
+
+output "api_gateway_arn" {
+  value = aws_apigatewayv2_api.this.arn
+}
+
 output "s3_videos_arn" {
   value = aws_s3_bucket.videos.arn
 }
