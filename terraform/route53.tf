@@ -9,8 +9,8 @@ resource "aws_route53_record" "cf" {
   name     = "${var.cloudfront.subdomain}.${var.route53.zone}"
 
   alias {
-    name                   = aws_cloudfront_distribution.vod.domain_name
-    zone_id                = aws_cloudfront_distribution.vod.hosted_zone_id
+    name                   = aws_cloudfront_distribution.video-out.domain_name
+    zone_id                = aws_cloudfront_distribution.video-out.hosted_zone_id
     evaluate_target_health = false
   }
 }

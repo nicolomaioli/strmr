@@ -6,7 +6,7 @@ const {
   REACT_APP_AWS_COGNITO_REDIRECT_SIGN_IN,
   REACT_APP_AWS_COGNITO_REDIRECT_SIGN_OUT,
   REACT_APP_AWS_COGNITO_DOMAIN,
-  REACT_APP_AWS_VIDEO_BUCKET_NAME,
+  REACT_APP_AWS_INPUT_BUCKET_NAME,
 } = process.env;
 
 const awsconfig = {
@@ -27,7 +27,7 @@ const awsconfig = {
   },
   Storage: {
     AWSS3: {
-      bucket: REACT_APP_AWS_VIDEO_BUCKET_NAME,
+      bucket: REACT_APP_AWS_INPUT_BUCKET_NAME,
       region: REACT_APP_AWS_REGION,
     },
   },

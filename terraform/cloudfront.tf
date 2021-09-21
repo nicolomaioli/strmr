@@ -1,31 +1,31 @@
-resource "aws_cloudfront_origin_access_identity" "vod" {
-  comment = "Origin access identity for the vod bucket"
+resource "aws_cloudfront_origin_access_identity" "video-out" {
+  comment = "Origin access identity for the video-out bucket"
 }
 
-data "aws_iam_policy_document" "vod" {
+data "aws_iam_policy_document" "video-out" {
   statement {
     actions   = ["s3:GetObject"]
-    resources = ["${aws_s3_bucket.vod.arn}/*"]
+    resources = ["${aws_s3_bucket.video-out.arn}/*"]
 
     principals {
       type        = "AWS"
-      identifiers = [aws_cloudfront_origin_access_identity.vod.iam_arn]
+      identifiers = [aws_cloudfront_origin_access_identity.video-out.iam_arn]
     }
   }
 }
 
-resource "aws_s3_bucket_policy" "vod" {
-  bucket = aws_s3_bucket.vod.id
-  policy = data.aws_iam_policy_document.vod.json
+resource "aws_s3_bucket_policy" "video-out" {
+  bucket = aws_s3_bucket.video-out.id
+  policy = data.aws_iam_policy_document.video-out.json
 }
 
-resource "aws_cloudfront_distribution" "vod" {
+resource "aws_cloudfront_distribution" "video-out" {
   origin {
-    domain_name = aws_s3_bucket.vod.bucket_regional_domain_name
-    origin_id   = aws_s3_bucket.vod.id
+    domain_name = aws_s3_bucket.video-out.bucket_regional_domain_name
+    origin_id   = aws_s3_bucket.video-out.id
 
     s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.vod.cloudfront_access_identity_path
+      origin_access_identity = aws_cloudfront_origin_access_identity.video-out.cloudfront_access_identity_path
     }
   }
 
@@ -48,7 +48,7 @@ resource "aws_cloudfront_distribution" "vod" {
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = aws_s3_bucket.vod.id
+    target_origin_id = aws_s3_bucket.video-out.id
 
     forwarded_values {
       query_string = false

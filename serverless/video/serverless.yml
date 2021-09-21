@@ -16,8 +16,8 @@ provider:
   environment:
     REGION: ${self:provider.region}
     STAGE: ${self:provider.stage}
-    OUTPUT_BUCKET_NAME: 'strmr-vod-${self:provider.stage}'
-    VIDEOS_TABLE_NAME: 'strmr-videos-${self:provider.stage}'
+    OUTPUT_BUCKET_NAME: ${env:OUTPUT_BUCKET_NAME}
+    VIDEOS_TABLE_NAME: ${env:VIDEOS_TABLE_NAME}
     SERVE_VIDEO_URL: ${env:SERVE_VIDEO_URL}
     MEDIACONVERT_URL: ${env:MEDIACONVERT_URL}
     MEDIACONVERT_QUEUE_ARN: ${env:MEDIACONVERT_QUEUE_ARN}
@@ -30,11 +30,11 @@ provider:
         - Effect: 'Allow'
           Action:
             - 's3:ListBucket'
-          Resource: ${env:VIDEOS_BUCKET_ARN}
+          Resource: ${env:INPUT_BUCKET_ARN}
         - Effect: 'Allow'
           Action:
             - 's3:GetObject'
-          Resource: '${env:VIDEOS_BUCKET_ARN}/*'
+          Resource: '${env:INPUT_BUCKET_ARN}/*'
         # DynamoDB
         - Effect: 'Allow'
           Action:
@@ -66,7 +66,7 @@ functions:
     handler: bin/onUpload
     events:
       - s3:
-          bucket: "strmr-videos-${self:provider.stage}"
+          bucket: ${env:INPUT_BUCKET_NAME}
           existing: true
           event: s3:ObjectCreated:*
           rules:

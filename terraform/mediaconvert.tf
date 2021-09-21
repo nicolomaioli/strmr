@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "mediaconvert_role_policy" {
     ]
 
     resources = [
-      "${aws_s3_bucket.videos.arn}/*",
+      "${aws_s3_bucket.video-in.arn}/*",
     ]
   }
 
@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "mediaconvert_role_policy" {
     ]
 
     resources = [
-      "${aws_s3_bucket.vod.arn}/*",
+      "${aws_s3_bucket.video-out.arn}/*",
     ]
   }
 }

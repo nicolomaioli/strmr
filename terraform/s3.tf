@@ -1,5 +1,5 @@
-resource "aws_s3_bucket" "videos" {
-  bucket = "${var.application}-videos-${terraform.workspace}"
+resource "aws_s3_bucket" "video-in" {
+  bucket = "${var.application}-${terraform.workspace}-video-in"
   acl    = "private"
 
   cors_rule {
@@ -24,8 +24,8 @@ resource "aws_s3_bucket" "videos" {
   tags = local.tags
 }
 
-resource "aws_s3_bucket" "vod" {
-  bucket = "${var.application}-vod-${terraform.workspace}"
+resource "aws_s3_bucket" "video-out" {
+  bucket = "${var.application}-${terraform.workspace}-video-out"
   acl    = "private"
 
   cors_rule {

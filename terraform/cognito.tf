@@ -87,8 +87,8 @@ data "aws_iam_policy_document" "cognito_authenticated_role_policy" {
     ]
 
     resources = [
-      "${aws_s3_bucket.videos.arn}",
-      "${aws_s3_bucket.videos.arn}/*",
+      "${aws_s3_bucket.video-in.arn}",
+      "${aws_s3_bucket.video-in.arn}/*",
     ]
   }
 }

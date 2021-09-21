@@ -19,7 +19,7 @@ output "api_gateway_arn" {
 }
 
 output "s3_videos_arn" {
-  value = aws_s3_bucket.videos.arn
+  value = aws_s3_bucket.video-in.arn
 }
 
 output "dynamodb_table_name" {

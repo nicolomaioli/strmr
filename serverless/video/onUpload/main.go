@@ -48,7 +48,7 @@ func submitJob(ctx context.Context, cfg aws.Config, r *events.S3EventRecord, obj
 	)
 
 	outputS3URI := fmt.Sprintf(
-		"s3://%s/public/vod/%s/%s",
+		"s3://%s/public/%s/%s",
 		common.OutputBucketName,
 		obj.Metadata["username"],
 		obj.Metadata["id"],

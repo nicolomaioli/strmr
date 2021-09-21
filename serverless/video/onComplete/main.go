@@ -21,7 +21,7 @@ func updateRecord(ctx context.Context, cfg aws.Config, d *common.MediaConvertEve
 	client := dynamodb.NewFromConfig(cfg)
 
 	path := fmt.Sprintf(
-		"https://%s/public/vod/%s/%s.mpd",
+		"https://%s/public/%s/%s.mpd",
 		common.ServeVideoURL,
 		d.UserMetadata["username"],
 		d.UserMetadata["id"],
