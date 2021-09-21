@@ -20,7 +20,6 @@ const Play = () => {
 
         setVideoSrc(video["Path"]);
       } catch (err) {
-        console.error(err);
         setError(err);
       }
     };
