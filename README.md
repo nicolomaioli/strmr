@@ -9,12 +9,12 @@ The architecture looks something like this:
 
 ## Repository Overview
 
-`./terraform`: AWS resources and configuration for Strmr.
-`./serverless`: Go Lambda resources for Strmr.
-`./client`: A React application (`create-react-app`).
-`./presentation`: A presentation I gave on Strmr at AND Digital.
+- `./terraform`: AWS resources and configuration for Strmr.
+- `./serverless`: Go Lambda resources for Strmr.
+- `./client`: A React application (`create-react-app`).
+- `./presentation`: A presentation I gave on Strmr at AND Digital.
 
-## Run (Somewhat) Locally
+## Run It
 
 - Start with deploying the infrastructure in `./terraform`. I have not included
     configuration for the Route53 Hosting Zone or ACM on account of I was using
