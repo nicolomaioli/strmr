@@ -1,11 +1,6 @@
-# Strmr Infrastructure
+# Terraform
 
-This repository contains the necessary infrastructure to deploy the Strmr
-application to AWS.
-
-## Terraform
-
-### Provision
+## Provision
 
 Create an S3 bucket to initialise the Terraform backend. Create a file named
 `terraform/terraform.backend.tfvars` with the content:
@@ -15,8 +10,8 @@ bucket = "<YOUR_BUCKET_NAME>"
 region = "<YOUR_REGION>"
 ```
 
-Optionally create a `terraform/terraform.tfvars` file to personalise some of
-the values in `terraform/variables.tf`.
+Create a `terraform/terraform.tfvars` file to personalise some of the values in
+`terraform/variables.tf`.
 
 Initialise Terraform:
 
