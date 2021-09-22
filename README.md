@@ -34,8 +34,8 @@ The architecture looks something like this:
 It is unlikely that I will have time to go back to this project anytime soon,
 that said there are a few things I would like to address:
 
-- Write some tests;
-- Automate the creation of the various `.env*` files;
-- Add support for `HLS`;
-- Refactor the Terraform code to leverage Terraform remote state;
-- Add resources and configuration to deploy the React client.
+- Automatically update `.env` files for Serverless and React from Terraform;
+- Validate media files onUpload;
+- Add support for HLS;
+- Tidy up the codebase;
+- Automate deployments.

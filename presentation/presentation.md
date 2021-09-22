@@ -60,11 +60,12 @@ Do *not* talk to me about:
 - [AWS Solutions: Video On Demand](https://www.youtube.com/watch?v=d-XCfp97pX0&t=173s)
 - [Serverless: Hello World Go Example](https://www.serverless.com/framework/docs/providers/aws/examples/hello-world/go/)
 - [DynamoDB, expressions and Go](https://antklim.medium.com/dynamodb-expressions-and-go-b8230c253e1f)
+- [Create a poster frame and thumbnail images for videos using AWS Elemental MediaConvert](https://aws.amazon.com/blogs/media/create-a-poster-frame-and-thumbnail-images-for-videos-using-aws-elemental-mediaconvert/)
 
 # Improvements
 
 - Automatically update `.env` files for Serverless and React from Terraform.
-- Generate thumbnails with MediaConvert.
+- Validate media files onUpload.
 - Add support for HLS.
 - Tidy up the codebase.
 - Automate deployments.
