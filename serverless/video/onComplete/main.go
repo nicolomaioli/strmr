@@ -20,11 +20,21 @@ import (
 func updateRecord(ctx context.Context, cfg aws.Config, d *common.MediaConvertEventDetail) error {
 	client := dynamodb.NewFromConfig(cfg)
 
-	path := fmt.Sprintf(
-		"https://%s/public/%s/%s.mpd",
+	basePath := fmt.Sprintf(
+		"https://%s/public/%s/%s",
 		common.ServeVideoURL,
 		d.UserMetadata["username"],
 		d.UserMetadata["id"],
+	)
+
+	path := fmt.Sprintf(
+		"%s.mpd",
+		basePath,
+	)
+
+	posterFrame := fmt.Sprintf(
+		"%s.0000001.jpg",
+		basePath,
 	)
 
 	key := map[string]string{
@@ -39,6 +49,7 @@ func updateRecord(ctx context.Context, cfg aws.Config, d *common.MediaConvertEve
 	upd := expression.
 		Set(expression.Name("JobStatus"), expression.Value("COMPLETED")).
 		Set(expression.Name("Path"), expression.Value(path)).
+		Set(expression.Name("PosterFrame"), expression.Value(posterFrame)).
 		Set(expression.Name("UpdatedAt"), expression.Value(time.Now().Unix()))
 
 	expr, err := expression.NewBuilder().WithUpdate(upd).Build()

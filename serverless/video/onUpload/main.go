@@ -102,10 +102,6 @@ func submitJob(ctx context.Context, cfg aws.Config, r *events.S3EventRecord, obj
 									H264Settings: &types.H264Settings{
 										RateControlMode: types.H264RateControlModeQvbr,
 										MaxBitrate:      5000000,
-										// FramerateControl:             types.H264FramerateControlSpecified,
-										// FramerateConversionAlgorithm: types.H264FramerateConversionAlgorithmDuplicateDrop,
-										// FramerateDenominator:         1000,
-										// FramerateNumerator:           30000,
 									},
 								},
 							},

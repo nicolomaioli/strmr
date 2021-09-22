@@ -51,16 +51,17 @@ type LambdaHTTPErrorBody struct {
 }
 
 type VideoRecord struct {
-	Username  string
-	ID        string
-	Duration  float64
-	Width     int
-	Height    int
-	Title     string
-	JobStatus string
-	CreatedAt time.Time `dynamodbav:",unixtime"`
-	UpdatedAt time.Time `dynamodbav:",unixtime"`
-	Path      string    `dynamodbav:",omitempty"`
+	Username    string
+	ID          string
+	Duration    float64
+	Width       int
+	Height      int
+	Title       string
+	JobStatus   string
+	CreatedAt   time.Time `dynamodbav:",unixtime"`
+	UpdatedAt   time.Time `dynamodbav:",unixtime"`
+	Path        string    `dynamodbav:",omitempty"`
+	PosterFrame string    `dynamodbav:",omitempty"`
 }
 
 type MediaConvertEventDetail struct {
