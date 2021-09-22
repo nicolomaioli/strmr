@@ -35,6 +35,14 @@ provider:
           Action:
             - 's3:GetObject'
           Resource: '${env:INPUT_BUCKET_ARN}/*'
+        - Effect: 'Allow'
+          Action:
+            - 's3:ListBucket'
+          Resource: ${env:OUTPUT_BUCKET_ARN}
+        - Effect: 'Allow'
+          Action:
+            - 's3:GetObject'
+          Resource: '${env:OUTPUT_BUCKET_ARN}/*'
         # DynamoDB
         - Effect: 'Allow'
           Action:

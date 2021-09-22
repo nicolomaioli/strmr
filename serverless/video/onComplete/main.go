@@ -14,17 +14,39 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/nicolomaioli/strmr/serverless/video/common"
 )
 
-func updateRecord(ctx context.Context, cfg aws.Config, d *common.MediaConvertEventDetail) error {
+func getPosterFrame(ctx context.Context, cfg aws.Config, username, id string) string {
+	// Check if .0000001.jpg is present or return .0000000.jpg, which is always
+	// present (first frame of video)
+	client := s3.NewFromConfig(cfg)
+
+	ext := "0000001.jpg"
+	key := fmt.Sprintf("public/%s/%s.%s", username, id, ext)
+
+	headObjIn := &s3.HeadObjectInput{
+		Bucket: &common.OutputBucketName,
+		Key:    &key,
+	}
+
+	_, err := client.HeadObject(ctx, headObjIn)
+	if err != nil {
+		return "0000000.jpg"
+	}
+
+	return ext
+}
+
+func updateRecord(ctx context.Context, cfg aws.Config, username, id string) error {
 	client := dynamodb.NewFromConfig(cfg)
 
 	basePath := fmt.Sprintf(
 		"https://%s/public/%s/%s",
 		common.ServeVideoURL,
-		d.UserMetadata["username"],
-		d.UserMetadata["id"],
+		username,
+		id,
 	)
 
 	path := fmt.Sprintf(
@@ -33,12 +55,13 @@ func updateRecord(ctx context.Context, cfg aws.Config, d *common.MediaConvertEve
 	)
 
 	posterFrame := fmt.Sprintf(
-		"%s.0000001.jpg",
+		"%s.%s",
 		basePath,
+		getPosterFrame(ctx, cfg, username, id),
 	)
 
 	key := map[string]string{
-		"ID": d.UserMetadata["id"],
+		"ID": id,
 	}
 
 	pk, err := attributevalue.MarshalMap(key)
@@ -81,7 +104,12 @@ func Handler(ctx context.Context, e events.CloudWatchEvent) {
 		log.Fatal(err)
 	}
 
-	err = updateRecord(ctx, cfg, &d)
+	err = updateRecord(
+		ctx,
+		cfg,
+		d.UserMetadata["username"],
+		d.UserMetadata["id"],
+	)
 	if err != nil {
 		log.Fatal(err)
 	}
