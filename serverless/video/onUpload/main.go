@@ -82,14 +82,30 @@ func submitJob(ctx context.Context, cfg aws.Config, r *events.S3EventRecord, obj
 			},
 			OutputGroups: []types.OutputGroup{
 				{
+					// DASH ISO output group
+					OutputGroupSettings: &types.OutputGroupSettings{
+						Type: "DASH_ISO_GROUP_SETTINGS",
+						DashIsoGroupSettings: &types.DashIsoGroupSettings{
+							Destination:    &outputS3URI,
+							SegmentLength:  30,
+							FragmentLength: 2,
+						},
+					},
 					Outputs: []types.Output{
 						{
+							ContainerSettings: &types.ContainerSettings{
+								Container: types.ContainerTypeMpd,
+							},
 							VideoDescription: &types.VideoDescription{
 								CodecSettings: &types.VideoCodecSettings{
 									Codec: types.VideoCodecH264,
 									H264Settings: &types.H264Settings{
 										RateControlMode: types.H264RateControlModeQvbr,
 										MaxBitrate:      5000000,
+										// FramerateControl:             types.H264FramerateControlSpecified,
+										// FramerateConversionAlgorithm: types.H264FramerateConversionAlgorithmDuplicateDrop,
+										// FramerateDenominator:         1000,
+										// FramerateNumerator:           30000,
 									},
 								},
 							},
@@ -105,17 +121,34 @@ func submitJob(ctx context.Context, cfg aws.Config, r *events.S3EventRecord, obj
 									},
 								},
 							},
-							ContainerSettings: &types.ContainerSettings{
-								Container: types.ContainerTypeMpd,
-							},
 						},
 					},
+				},
+				{
+					// Poster frame output group
 					OutputGroupSettings: &types.OutputGroupSettings{
-						Type: "DASH_ISO_GROUP_SETTINGS",
-						DashIsoGroupSettings: &types.DashIsoGroupSettings{
-							Destination:    &outputS3URI,
-							SegmentLength:  30,
-							FragmentLength: 2,
+						Type: "FILE_GROUP_SETTINGS",
+						FileGroupSettings: &types.FileGroupSettings{
+							Destination: &outputS3URI,
+						},
+					},
+					Outputs: []types.Output{
+						{
+							Extension: aws.String("jpg"),
+							ContainerSettings: &types.ContainerSettings{
+								Container: types.ContainerTypeRaw,
+							},
+							VideoDescription: &types.VideoDescription{
+								CodecSettings: &types.VideoCodecSettings{
+									Codec: types.VideoCodecFrameCapture,
+									FrameCaptureSettings: &types.FrameCaptureSettings{
+										MaxCaptures:          2,
+										Quality:              80,
+										FramerateDenominator: 30,
+										FramerateNumerator:   1,
+									},
+								},
+							},
 						},
 					},
 				},
@@ -125,6 +158,7 @@ func submitJob(ctx context.Context, cfg aws.Config, r *events.S3EventRecord, obj
 
 	_, err := client.CreateJob(ctx, createJobInput)
 	if err != nil {
+		log.Print(err)
 		jobStatus = common.JOB_ERROR
 	}
 
