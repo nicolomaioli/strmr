@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import { useParams } from "react-router-dom";
 import ShakaPlayer from "shaka-player-react";
@@ -8,7 +9,7 @@ import "shaka-player/dist/controls.css";
 const { REACT_APP_STRMR_API_URL } = process.env;
 
 const Play = () => {
-  const [videoSrc, setVideoSrc] = useState("");
+  const [video, setVideo] = useState("");
   const [error, setError] = useState(null);
   const { id } = useParams();
 
@@ -18,23 +19,23 @@ const Play = () => {
         const res = await fetch(`${REACT_APP_STRMR_API_URL}/video/${id}`);
         const video = await res.json();
 
-        setVideoSrc(video["Path"]);
+        setVideo(video);
       } catch (err) {
         setError(err);
       }
     };
 
     getVideo(id);
-  }, [id, setVideoSrc, setError]);
+  }, [id, setVideo, setError]);
 
   return (
-    <React.Fragment>
-      {error ? (
-        <Typography color="error">{error.message}</Typography>
-      ) : (
-        <ShakaPlayer autoPlay src={videoSrc} />
-      )}
-    </React.Fragment>
+    <Box mt={4}>
+      {error && <Typography color="error">{error.message}</Typography>}
+      <ShakaPlayer autoPlay src={video["Path"]} />
+      <Box mt={2}>
+        <Typography variant="h5">{video["Title"]}</Typography>
+      </Box>
+    </Box>
   );
 };
 

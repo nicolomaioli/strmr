@@ -39,37 +39,35 @@ const Home = () => {
   }, [setVideos, setError]);
 
   return (
-    <React.Fragment>
-      <Box mt={4}>
-        {error && <Typography color="error">{error.message}</Typography>}
-        <Grid container spacing={3}>
-          {videos.map((video, i) => {
-            return (
-              <Grid key={i} item xs={12} sm={6} md={4}>
-                <Card className={classes.card}>
-                  <Link to={`/play/${video["ID"]}`}>
-                    <CardMedia
-                      component="img"
-                      height="160"
-                      image={video["PosterFrame"]}
-                      alt={video["Title"]}
-                    />
-                  </Link>
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {video["Title"]}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {video["Username"]}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </Box>
-    </React.Fragment>
+    <Box mt={4}>
+      {error && <Typography color="error">{error.message}</Typography>}
+      <Grid container spacing={3}>
+        {videos.map((video, i) => {
+          return (
+            <Grid key={i} item xs={12} sm={6} md={4}>
+              <Card className={classes.card}>
+                <Link to={`/play/${video["ID"]}`}>
+                  <CardMedia
+                    component="img"
+                    height="160"
+                    image={video["PosterFrame"]}
+                    alt={video["Title"]}
+                  />
+                </Link>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {video["Title"]}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {video["Username"]}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          );
+        })}
+      </Grid>
+    </Box>
   );
 };
 
