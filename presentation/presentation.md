@@ -4,7 +4,7 @@
 
 ---
 header-includes:
-  - \hypersetup{colorlinks=false,
+  - \hypersetup{colorlinks=true,
             allbordercolors={0 0 0},
             pdfborderstyle={/S/U/W 1}}
 ---
