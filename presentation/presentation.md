@@ -24,11 +24,6 @@ Talk to me about:
 - Linux
 - Psychedelic Garage
 
-Do *not* talk to me about:
-
-- React
-- IATA
-
 # OK, Why Tho
 
 - I was interested in AWS S3 for uploading and serving large files.
