@@ -18,8 +18,20 @@ output "api_gateway_arn" {
   value = aws_apigatewayv2_api.this.arn
 }
 
-output "s3_videos_arn" {
+output "s3_video_in_arn" {
   value = aws_s3_bucket.video-in.arn
+}
+
+output "s3_video_in_name" {
+  value = aws_s3_bucket.video-in.id
+}
+
+output "s3_video_out_arn" {
+  value = aws_s3_bucket.video-out.arn
+}
+
+output "s3_video_out_id" {
+  value = aws_s3_bucket.video-out.id
 }
 
 output "dynamodb_table_name" {
